@@ -52,32 +52,44 @@ class _InfoPageState extends State<InfoPage> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           elevation: 4,
-                          child: ListTile(
-                            title: Text(patient.name),
-                            subtitle: Text(patient.age.toString()),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  UpdatePatientPage(
-                                                      index: index,
-                                                      patient: patient)));
-                                    },
-                                    icon: const Icon(Icons.edit),
-                                    color: Colors.blue[600]),
-                                IconButton(
-                                  onPressed: () {
-                                    _deleteInfo(index);
-                                  },
-                                  icon: const Icon(Icons.delete),
-                                  color: Colors.red[900],
+                          child: Column(
+                            children: [
+                              ListTile(
+                                title: Text(
+                                    patient.name + " / " + patient.age + " ans",
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold)),
+                                subtitle: Text(patient.exercise.toString(),
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500)),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      UpdatePatientPage(
+                                                          index: index,
+                                                          patient: patient)));
+                                        },
+                                        icon: const Icon(Icons.edit),
+                                        color: Colors.blue[600]),
+                                    IconButton(
+                                      onPressed: () {
+                                        _deleteInfo(index);
+                                      },
+                                      icon: const Icon(Icons.delete),
+                                      color: Colors.red[900],
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                              Text("HERE STOPWATCH"),
+                            ],
                           ),
                         ));
                   });

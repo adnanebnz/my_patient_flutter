@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:learning_hive/models/patient.dart';
 import 'package:learning_hive/screens/info_screen.dart';
+import 'package:alarm/alarm.dart';
 
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(PatientAdapter());
   await Hive.openBox('patients');
+  await Alarm.init();
   runApp(const MyApp());
 }
 

@@ -1,4 +1,4 @@
-package com.example.learning_hive
+package com.example.myPatient
 
 import io.flutter.embedding.android.FlutterActivity
 

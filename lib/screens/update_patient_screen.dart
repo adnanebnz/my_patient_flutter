@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:learning_hive/models/patient.dart';
-import 'package:learning_hive/utils/update_patient_form.dart';
+import 'package:myPatient/models/patient.dart';
+import 'package:myPatient/utils/update_patient_form.dart';
 
 class UpdatePatientPage extends StatefulWidget {
   const UpdatePatientPage(
@@ -15,6 +15,7 @@ class _AddPatientPageState extends State<UpdatePatientPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text('Modifier un patient'),

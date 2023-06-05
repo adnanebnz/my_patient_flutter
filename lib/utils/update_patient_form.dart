@@ -28,7 +28,7 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
 
   String? _fieldValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Field is required';
+      return 'Champ Obligatoire';
     }
     return null;
   }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:learning_hive/models/patient.dart';
-import 'package:learning_hive/screens/info_screen.dart';
+import 'package:myPatient/models/patient.dart';
 import 'package:alarm/alarm.dart';
+import 'package:myPatient/screens/splash_screen.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -32,9 +32,9 @@ class _MyAppState extends State<MyApp> {
         title: 'Hive Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
           useMaterial3: true,
         ),
-        home: const InfoPage());
+        home: const SplashScreen());
   }
 }

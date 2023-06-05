@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:learning_hive/models/patient.dart';
-import 'package:learning_hive/screens/add_patient_screen.dart';
-import 'package:learning_hive/screens/update_patient_screen.dart';
+import 'package:myPatient/models/patient.dart';
+import 'package:myPatient/screens/add_patient_screen.dart';
+import 'package:myPatient/screens/update_patient_screen.dart';
 import 'package:alarm/alarm.dart';
 
 class InfoPage extends StatefulWidget {
@@ -16,6 +16,7 @@ class InfoPage extends StatefulWidget {
 
 class _InfoPageState extends State<InfoPage> {
   late final Box box;
+  DateTime now = DateTime.now();
 
   _deleteInfo(int index) async {
     await box.deleteAt(index);
@@ -31,8 +32,9 @@ class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Informations'),
+        title: const Text('Mes Patients'),
       ),
       body: ValueListenableBuilder(
           valueListenable: box.listenable(),
@@ -61,7 +63,7 @@ class _InfoPageState extends State<InfoPage> {
                                     style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold)),
-                                subtitle: Text(patient.exercise.toString(),
+                                subtitle: Text("Excercice: ${patient.exercise}",
                                     style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500)),
@@ -91,22 +93,32 @@ class _InfoPageState extends State<InfoPage> {
                               ),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("Mouvement: ${patient.exercise}",
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500)),
+                                  Text("Durée: ${patient.duration} min"),
                                   IconButton(
                                     onPressed: () async => {
                                       await Alarm.set(
-                                          alarmSettings: AlarmSettings(
-                                              id: index,
-                                              dateTime: DateTime(2023,
-                                                  DateTime.june, 5, 16, 50, 00),
-                                              assetAudioPath:
-                                                  "assets/alarm.mp3"))
+                                              alarmSettings: AlarmSettings(
+                                                  id: index,
+                                                  dateTime: DateTime(
+                                                      now.year,
+                                                      now.month,
+                                                      now.day,
+                                                      now.hour,
+                                                      now.minute +
+                                                          int.parse(patient
+                                                              .duration)),
+                                                  assetAudioPath:
+                                                      "assets/alarm.mp3",
+                                                  enableNotificationOnKill:
+                                                      true,
+                                                  notificationBody:
+                                                      "Exercise terminé",
+                                                  notificationTitle:
+                                                      "Exercise terminé pour ${patient.name}",
+                                                  vibrate: true))
+                                          .then((value) => {})
                                     },
                                     icon: const Icon(Icons.alarm),
                                     color: Colors.red[900],
@@ -117,7 +129,7 @@ class _InfoPageState extends State<InfoPage> {
                                       icon: const Icon(Icons.alarm_off),
                                       color: Colors.red[900])
                                 ],
-                              )
+                              ),
                             ],
                           ),
                         ));

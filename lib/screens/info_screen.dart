@@ -7,6 +7,7 @@ import 'package:myPatient/models/patient.dart';
 import 'package:myPatient/screens/active_patients_screen.dart';
 import 'package:myPatient/screens/add_exercice_screen.dart';
 import 'package:myPatient/screens/add_patient_screen.dart';
+import 'package:myPatient/screens/exercices_list_screen.dart';
 import 'package:myPatient/screens/update_patient_screen.dart';
 
 class InfoPage extends StatefulWidget {
@@ -37,7 +38,7 @@ class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 2,
+        length: 3,
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
@@ -52,6 +53,10 @@ class _InfoPageState extends State<InfoPage> {
                   icon: Icon(Icons.checklist_rtl),
                   text: 'Patients active',
                 ),
+                Tab(
+                  icon: Icon(Icons.sports_gymnastics),
+                  text: 'exercises',
+                )
               ],
             ),
           ),
@@ -352,7 +357,9 @@ class _InfoPageState extends State<InfoPage> {
               const MaterialApp(
                 debugShowCheckedModeBanner: false,
                 home: ActivePatientsPage(),
-              )
+              ),
+              const MaterialApp(
+                  debugShowCheckedModeBanner: false, home: exercisesListPage()),
             ],
           ),
         ));

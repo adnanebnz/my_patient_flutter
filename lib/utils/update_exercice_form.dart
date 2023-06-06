@@ -42,6 +42,9 @@ class _UpdateExerciceFormState extends State<UpdateExerciceForm> {
   void initState() {
     super.initState();
     exerciceBox = Hive.box('exercises');
+    _nameController = TextEditingController(text: widget.exercise.name);
+    _durationController =
+        TextEditingController(text: widget.exercise.duration.toString());
   }
 
   @override

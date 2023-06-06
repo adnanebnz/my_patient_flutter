@@ -82,6 +82,7 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Switch.adaptive(
+                                              activeColor: Colors.green,
                                               value: patient.isActive,
                                               onChanged: (value) {
                                                 setState(() {

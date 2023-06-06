@@ -123,6 +123,17 @@ class _InfoPageState extends State<InfoPage> {
                                                             context: context,
                                                             builder: (context) {
                                                               return AlertDialog(
+                                                                shape: RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10)),
+                                                                elevation: 5,
+                                                                icon: Icon(
+                                                                  Icons.warning,
+                                                                  color: Colors
+                                                                      .red,
+                                                                  size: 30,
+                                                                ),
                                                                 title: const Text(
                                                                     'Supprimer'),
                                                                 content: const Text(
@@ -133,16 +144,20 @@ class _InfoPageState extends State<InfoPage> {
                                                                           context,
                                                                           false),
                                                                       child: const Text(
-                                                                          'Non')),
+                                                                          'NON')),
                                                                   TextButton(
                                                                       onPressed:
                                                                           () =>
                                                                               {
                                                                                 _deleteInfo(index),
+                                                                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                                  content: Text('Patient supprimé'),
+                                                                                  duration: Duration(seconds: 2),
+                                                                                )),
                                                                                 Navigator.pop(context, true)
                                                                               },
                                                                       child: const Text(
-                                                                          'Oui')),
+                                                                          'OUI')),
                                                                 ],
                                                               );
                                                             });

@@ -121,6 +121,11 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
                 onPressed: () {
                   if (_patientFormKey.currentState!.validate()) {
                     _updateInfo();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Patient modifié avec succès'),
+                      ),
+                    );
                   }
                 },
                 child: const Text('Modifier'),

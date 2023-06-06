@@ -13,10 +13,16 @@ class Patient {
   String exercise;
   @HiveField(3)
   String duration;
+  @HiveField(4)
+  bool isActive = false;
+  @HiveField(5)
+  String disease;
 
   Patient(
       {required this.name,
       required this.age,
       required this.exercise,
-      required this.duration});
+      required this.duration,
+      required this.isActive,
+      required this.disease});
 }

@@ -14,15 +14,19 @@ class UpdatePatientPage extends StatefulWidget {
 class _AddPatientPageState extends State<UpdatePatientPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: const Text('Modifier un patient'),
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
+          useMaterial3: true,
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: UpdatePersonForm(index: widget.index, patient: widget.patient),
-        ));
+        home: Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: Colors.white,
+            body: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: UpdatePersonForm(
+                  index: widget.index, patient: widget.patient),
+            )));
   }
 }

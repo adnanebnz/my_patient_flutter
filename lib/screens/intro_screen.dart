@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:myPatient/screens/info_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -36,6 +37,11 @@ class _IntroScreen extends State<IntroScreen> {
               Colors.white,
             ])));
 
+    Future setIsSeen() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('alreadyShown', true);
+    }
+
     return IntroductionScreen(
       globalBackgroundColor: Colors.white,
       pages: [
@@ -60,7 +66,7 @@ class _IntroScreen extends State<IntroScreen> {
           decoration: pageDecoration,
         ),
       ],
-      onDone: () => goHomePage(context),
+      onDone: () => {goHomePage(context), setIsSeen()},
       onSkip: () => goHomePage(context),
       showSkipButton: true,
       nextFlex: 0,

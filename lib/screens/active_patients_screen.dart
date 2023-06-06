@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:myPatient/models/patient.dart';
 
 class ActivePatientsPage extends StatefulWidget {
@@ -12,6 +12,10 @@ class ActivePatientsPage extends StatefulWidget {
 class _ActivePatientsPageState extends State<ActivePatientsPage> {
   late final Box box;
 
+  _deleteInfo(int index) async {
+    await box.deleteAt(index);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -20,26 +24,35 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: ValueListenableBuilder(valueListenable: box.listenable(), builder: (context,box,widget)=>{
-        return ListView.builder(
-          itemCount: box.length,
-          itemBuilder: (context, index) {
-            final patient = box.getAt(index) as Patient;
-            return ListTile(
-              title: Text(patient.name),
-              subtitle: Text(patient.description),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () {
-                  box.deleteAt(index);
-                },
-              ),
-            );
-          },
-        );
-      })
-      ),
-    );
+    return Scaffold(
+        body: ValueListenableBuilder(
+            valueListenable: box.listenable(),
+            builder: (context, box, _) {
+              return ListView.builder(
+                  itemCount: box.length,
+                  itemBuilder: (context, index) {
+                    final patient = box.getAt(index) as Patient;
+                    if (patient.isActive) {
+                      return Card(
+                        child: ListTile(
+                          title: Text(patient.name),
+                          subtitle: Text(patient.age.toString()),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    _deleteInfo(index);
+                                  },
+                                  icon: const Icon(Icons.delete)),
+                            ],
+                          ),
+                        ),
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  });
+            }));
   }
 }

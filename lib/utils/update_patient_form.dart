@@ -22,6 +22,8 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
   late final _exerciseController;
   // ignore: prefer_typing_uninitialized_variables
   late final _durationController;
+  // ignore: prefer_typing_uninitialized_variables
+  late final _diseaseController;
   final _patientFormKey = GlobalKey<FormState>();
 
   late final Box box;
@@ -38,7 +40,9 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
         name: _nameController.text,
         age: _ageController.text,
         exercise: _exerciseController.text,
-        duration: _durationController.text);
+        duration: _durationController.text,
+        isActive: false,
+        disease: _diseaseController.text);
     box.putAt(widget.index, newPerson);
     // ignore: avoid_print
     print('Updated successfully');
@@ -53,6 +57,8 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
     _exerciseController = TextEditingController(text: widget.patient.exercise);
     _durationController =
         TextEditingController(text: widget.patient.duration.toString());
+    _diseaseController =
+        TextEditingController(text: widget.patient.disease).toString();
   }
 
   @override
@@ -77,6 +83,14 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
               FilteringTextInputFormatter.digitsOnly
             ],
             controller: _ageController,
+            validator: _fieldValidator,
+          ),
+          const SizedBox(
+            height: 24.0,
+          ),
+          const Text('Exercice'),
+          TextFormField(
+            controller: _exerciseController,
             validator: _fieldValidator,
           ),
           const SizedBox(

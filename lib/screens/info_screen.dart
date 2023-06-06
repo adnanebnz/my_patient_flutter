@@ -17,7 +17,14 @@ class InfoPage extends StatefulWidget {
 
 class _InfoPageState extends State<InfoPage> {
   late final Box box;
+  bool value = false;
   DateTime now = DateTime.now();
+
+  _setIsActive(int index, bool isActive) async {
+    Patient patient = box.getAt(index);
+    patient.isActive = isActive;
+    await box.putAt(index, patient);
+  }
 
   _deleteInfo(int index) async {
     await box.deleteAt(index);
@@ -94,6 +101,12 @@ class _InfoPageState extends State<InfoPage> {
                                               trailing: Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
+                                                  Switch.adaptive(
+                                                      value: patient.isActive,
+                                                      onChanged: (value) => {
+                                                            _setIsActive(
+                                                                index, value)
+                                                          }),
                                                   IconButton(
                                                       onPressed: () {
                                                         Navigator.of(context).push(

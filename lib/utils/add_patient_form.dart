@@ -17,6 +17,7 @@ class _AddPersonFormState extends State<AddPersonForm> {
   final _exerciseController = TextEditingController();
   final _durationController = TextEditingController();
   final _patientFormKey = GlobalKey<FormState>();
+  final _diseaseController = TextEditingController();
 
   late final Box box;
 
@@ -32,7 +33,9 @@ class _AddPersonFormState extends State<AddPersonForm> {
         name: _nameController.text,
         age: _ageController.text,
         exercise: _exerciseController.text,
-        duration: _durationController.text);
+        duration: _durationController.text,
+        isActive: false,
+        disease: _diseaseController.text);
     box.add(newPerson);
     // ignore: avoid_print
     print('Added successfully');
@@ -71,6 +74,14 @@ class _AddPersonFormState extends State<AddPersonForm> {
           const SizedBox(
             height: 24.0,
           ),
+          const Text('Maladie'),
+          TextFormField(
+            controller: _diseaseController,
+            validator: _fieldValidator,
+          ),
+          const SizedBox(
+            height: 24.0,
+          ),
           const Text('Exercice'),
           TextFormField(
             controller: _exerciseController,
@@ -87,6 +98,9 @@ class _AddPersonFormState extends State<AddPersonForm> {
             ],
             controller: _durationController,
             validator: _fieldValidator,
+          ),
+          const SizedBox(
+            height: 24.0,
           ),
           const Spacer(),
           Padding(

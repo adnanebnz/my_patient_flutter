@@ -22,6 +22,9 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
   final _patientFormKey = GlobalKey<FormState>();
 
   late final Box box;
+  late final Box exerciseBox;
+
+  List<Exercise> selectedExercises = [];
 
   String? _fieldValidator(String? value) {
     if (value == null || value.isEmpty) {
@@ -32,12 +35,13 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
 
   _updateInfo() async {
     Patient newPerson = Patient(
-        name: _nameController.text,
-        age: _ageController.text,
-        isActive: false,
-        disease: _diseaseController.text,
-        exercises: []);
-    box.putAt(widget.index, newPerson);
+      name: _nameController.text,
+      age: _ageController.text,
+      isActive: false,
+      disease: _diseaseController.text,
+      exercises: selectedExercises,
+    );
+    await box.putAt(widget.index, newPerson);
     // ignore: avoid_print
     print('Updated successfully');
   }
@@ -46,6 +50,7 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
   void initState() {
     super.initState();
     box = Hive.box('patients');
+    exerciseBox = Hive.box('exercises');
     _nameController = TextEditingController(text: widget.patient.name);
     _ageController = TextEditingController(text: widget.patient.age.toString());
 
@@ -83,6 +88,30 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
           TextFormField(
             controller: _diseaseController,
             validator: _fieldValidator,
+          ),
+          const SizedBox(
+            height: 24.0,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: exerciseBox.length,
+              itemBuilder: (context, index) {
+                Exercise exercise = exerciseBox.getAt(index);
+                return CheckboxListTile(
+                  title: Text(exercise.name),
+                  value: selectedExercises.contains(exercise),
+                  onChanged: (value) {
+                    setState(() {
+                      if (value == true) {
+                        selectedExercises.add(exercise);
+                      } else {
+                        selectedExercises.remove(exercise);
+                      }
+                    });
+                  },
+                );
+              },
+            ),
           ),
           const Spacer(),
           Padding(

@@ -78,80 +78,92 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
                                       .toLowerCase()
                                       .contains(searchText.toLowerCase()) ||
                                   patient.age.toString().contains(searchText)) {
-                                return Card(
-                                  child: Column(
-                                    children: [
-                                      ListTile(
-                                        title: Text(patient.name +
-                                            " / " +
-                                            patient.age.toString() +
-                                            " ans"),
-                                        trailing: Row(
-                                          mainAxisSize: MainAxisSize.min,
+                                return Column(
+                                  children: [
+                                    Card(
+                                      elevation: 6.0,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(11.0),
+                                        child: Column(
                                           children: [
-                                            Switch.adaptive(
-                                              activeColor: Colors.green,
-                                              value: patient.isActive,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  patient.isActive = value;
-                                                });
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                    "${patient.name} / ${patient.age} ans"),
+                                                Switch.adaptive(
+                                                  activeColor: Colors.green,
+                                                  value: patient.isActive,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      patient.isActive = value;
+                                                    });
+                                                  },
+                                                )
+                                              ],
+                                            ),
+                                            const Divider(
+                                              height: 0,
+                                              thickness: 1,
+                                            ),
+                                            ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemCount:
+                                                  patient.exercises?.length,
+                                              itemBuilder: (context, index) {
+                                                final exercise =
+                                                    patient.exercises?[index];
+                                                return ListTile(
+                                                  title: Text(
+                                                      exercise?.name ?? ''),
+                                                  subtitle: Text(
+                                                      "Durée : ${exercise!.duration} mins"),
+                                                  trailing: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      IconButton(
+                                                          onPressed:
+                                                              () async => {
+                                                                    await Alarm.set(
+                                                                            alarmSettings: AlarmSettings(
+                                                                                id: index,
+                                                                                dateTime: DateTime(now.year, now.month, now.day, now.hour, now.minute + int.parse(exercise.duration)),
+                                                                                assetAudioPath: "assets/alarm.mp3",
+                                                                                enableNotificationOnKill: true,
+                                                                                notificationBody: "Exercise terminé",
+                                                                                notificationTitle: "Exercise terminé pour ${patient.name}",
+                                                                                vibrate: true))
+                                                                        .then((value) => {})
+                                                                  },
+                                                          icon: const Icon(
+                                                            Icons.alarm,
+                                                            color: Colors.green,
+                                                          )),
+                                                      IconButton(
+                                                          onPressed: () async =>
+                                                              {
+                                                                await Alarm
+                                                                    .stop(index)
+                                                              },
+                                                          icon: const Icon(
+                                                            Icons.alarm_off,
+                                                            color: Colors.red,
+                                                          )),
+                                                    ],
+                                                  ),
+                                                );
                                               },
                                             )
                                           ],
                                         ),
                                       ),
-                                      ListView.builder(
-                                          itemCount: patient.exercises?.length,
-                                          itemBuilder: (context, index) {
-                                            return ListTile(
-                                              title: Text(patient
-                                                  .exercises[index].name),
-                                              subtitle: Text(patient
-                                                  .exercises[index].duration
-                                                  .toString()),
-                                            );
-                                          }),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          IconButton(
-                                            onPressed: () async => {
-                                              await Alarm.set(
-                                                      alarmSettings: AlarmSettings(
-                                                          id: index,
-                                                          dateTime: DateTime(
-                                                              now.year,
-                                                              now.month,
-                                                              now.day,
-                                                              now.hour,
-                                                              now.minute + 2),
-                                                          assetAudioPath:
-                                                              "assets/alarm.mp3",
-                                                          enableNotificationOnKill:
-                                                              true,
-                                                          notificationBody:
-                                                              "Exercise terminé",
-                                                          notificationTitle:
-                                                              "Exercise terminé pour ${patient.name}",
-                                                          vibrate: true))
-                                                  .then((value) => {})
-                                            },
-                                            icon: const Icon(Icons.alarm),
-                                            color: Colors.red[900],
-                                          ),
-                                          IconButton(
-                                              onPressed: () async =>
-                                                  {await Alarm.stop(index)},
-                                              icon: const Icon(Icons.alarm_off),
-                                              color: Colors.red[900])
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 );
                               }
                             } else {

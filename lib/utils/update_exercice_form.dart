@@ -86,7 +86,7 @@ class _UpdateExerciceFormState extends State<UpdateExerciceForm> {
                     _updateExo();
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Patient modifié avec succès'),
+                        content: Text('Exercice modifié avec succès'),
                       ),
                     );
                   }

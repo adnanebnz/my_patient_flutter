@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
+import 'package:myPatient/screens/info_screen.dart';
 
 import '../models/patient.dart';
 
@@ -123,7 +124,6 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
                 onPressed: () {
                   if (_patientFormKey.currentState!.validate()) {
                     _updateInfo();
-                    Navigator.of(context).pop();
                   }
                 },
                 child: const Text('Modifier'),

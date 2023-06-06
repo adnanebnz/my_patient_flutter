@@ -38,6 +38,12 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 5.0),
                       child: SearchBar(
+                        elevation: MaterialStateProperty.all(2.0),
+                        backgroundColor: MaterialStateColor.resolveWith(
+                            (states) =>
+                                const Color.fromARGB(255, 231, 231, 231)),
+                        textStyle: MaterialStateTextStyle.resolveWith(
+                            (states) => const TextStyle(color: Colors.black54)),
                         controller: _nameController,
                         onChanged: (value) {
                           setState(() {
@@ -99,8 +105,6 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Text(
-                                              "Durée: ${patient.duration} min"),
                                           IconButton(
                                             onPressed: () async => {
                                               await Alarm.set(
@@ -111,9 +115,7 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
                                                               now.month,
                                                               now.day,
                                                               now.hour,
-                                                              now.minute +
-                                                                  int.parse(patient
-                                                                      .duration)),
+                                                              now.minute + 2),
                                                           assetAudioPath:
                                                               "assets/alarm.mp3",
                                                           enableNotificationOnKill:

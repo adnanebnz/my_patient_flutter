@@ -3,25 +3,23 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import '../models/patient.dart';
 
-class UpdatePersonForm extends StatefulWidget {
-  const UpdatePersonForm(
-      {super.key, required this.index, required this.patient});
+class UpdateExerciceForm extends StatefulWidget {
+  const UpdateExerciceForm(
+      {super.key, required this.index, required this.exercise});
   final int index;
-  final Patient patient;
+  final Exercise exercise;
+
   @override
-  State<UpdatePersonForm> createState() => _AddPersonFormState();
+  State<UpdateExerciceForm> createState() => _UpdateExerciceFormState();
 }
 
-class _AddPersonFormState extends State<UpdatePersonForm> {
+class _UpdateExerciceFormState extends State<UpdateExerciceForm> {
   // ignore: prefer_typing_uninitialized_variables
   late final _nameController;
   // ignore: prefer_typing_uninitialized_variables
-  late final _ageController;
-  // ignore: prefer_typing_uninitialized_variables
-  late final _diseaseController;
-  final _patientFormKey = GlobalKey<FormState>();
-
-  late final Box box;
+  late final _durationController;
+  final _exerciceFormKey = GlobalKey<FormState>();
+  late final Box exerciceBox;
 
   String? _fieldValidator(String? value) {
     if (value == null || value.isEmpty) {
@@ -30,14 +28,12 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
     return null;
   }
 
-  _updateInfo() async {
-    Patient newPerson = Patient(
-        name: _nameController.text,
-        age: _ageController.text,
-        isActive: false,
-        disease: _diseaseController.text,
-        exercises: []);
-    box.putAt(widget.index, newPerson);
+  _updateExo() async {
+    Exercise newExercice = Exercise(
+      name: _nameController.text,
+      duration: _durationController.text,
+    );
+    exerciceBox.putAt(widget.index, newExercice);
     // ignore: avoid_print
     print('Updated successfully');
   }
@@ -45,21 +41,17 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
   @override
   void initState() {
     super.initState();
-    box = Hive.box('patients');
-    _nameController = TextEditingController(text: widget.patient.name);
-    _ageController = TextEditingController(text: widget.patient.age.toString());
-
-    _diseaseController = TextEditingController(text: widget.patient.disease);
+    exerciceBox = Hive.box('exercises');
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _patientFormKey,
+      key: _exerciceFormKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Nom et prénom'),
+          const Text('Nom de l\'exercice'),
           TextFormField(
             controller: _nameController,
             validator: _fieldValidator,
@@ -67,22 +59,17 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
           const SizedBox(
             height: 24.0,
           ),
-          const Text('Age'),
+          const Text('Durée de l\'exercice'),
           TextFormField(
             keyboardType: TextInputType.number,
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.digitsOnly
             ],
-            controller: _ageController,
+            controller: _durationController,
             validator: _fieldValidator,
           ),
           const SizedBox(
             height: 24.0,
-          ),
-          const Text('Maladie'),
-          TextFormField(
-            controller: _diseaseController,
-            validator: _fieldValidator,
           ),
           const Spacer(),
           Padding(
@@ -92,8 +79,8 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  if (_patientFormKey.currentState!.validate()) {
-                    _updateInfo();
+                  if (_exerciceFormKey.currentState!.validate()) {
+                    _updateExo();
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Patient modifié avec succès'),

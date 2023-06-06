@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
-
 import '../models/patient.dart';
 
-class AddPersonForm extends StatefulWidget {
-  const AddPersonForm({super.key});
+class AddExerciceForm extends StatefulWidget {
+  const AddExerciceForm({super.key});
 
   @override
-  State<AddPersonForm> createState() => _AddPersonFormState();
+  State<AddExerciceForm> createState() => _AddExerciceFormState();
 }
 
-class _AddPersonFormState extends State<AddPersonForm> {
+class _AddExerciceFormState extends State<AddExerciceForm> {
   final _nameController = TextEditingController();
-  final _ageController = TextEditingController();
-  final _diseaseController = TextEditingController();
-  final _patientFormKey = GlobalKey<FormState>();
-
-  late final Box box;
+  final _durationController = TextEditingController();
+  final _exerciceFormKey = GlobalKey<FormState>();
+  late final Box exerciceBox;
 
   String? _fieldValidator(String? value) {
     if (value == null || value.isEmpty) {
@@ -26,15 +23,12 @@ class _AddPersonFormState extends State<AddPersonForm> {
     return null;
   }
 
-  _addInfo() async {
-    Patient newPerson = Patient(
+  _addExo() async {
+    Exercise newExercice = Exercise(
       name: _nameController.text,
-      age: _ageController.text,
-      isActive: false,
-      disease: _diseaseController.text,
-      exercises: [],
+      duration: _durationController.text,
     );
-    box.add(newPerson);
+    exerciceBox.add(newExercice);
     // ignore: avoid_print
     print('Added successfully');
   }
@@ -42,17 +36,17 @@ class _AddPersonFormState extends State<AddPersonForm> {
   @override
   void initState() {
     super.initState();
-    box = Hive.box('patients');
+    exerciceBox = Hive.box('exercises');
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _patientFormKey,
+      key: _exerciceFormKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Nom et prénom'),
+          const Text('Nom de l\'exercice'),
           TextFormField(
             controller: _nameController,
             validator: _fieldValidator,
@@ -60,21 +54,13 @@ class _AddPersonFormState extends State<AddPersonForm> {
           const SizedBox(
             height: 24.0,
           ),
-          const Text('Age'),
+          const Text('Durée de l\'exercice'),
           TextFormField(
             keyboardType: TextInputType.number,
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.digitsOnly
             ],
-            controller: _ageController,
-            validator: _fieldValidator,
-          ),
-          const SizedBox(
-            height: 24.0,
-          ),
-          const Text('Maladie'),
-          TextFormField(
-            controller: _diseaseController,
+            controller: _durationController,
             validator: _fieldValidator,
           ),
           const Spacer(),
@@ -85,8 +71,8 @@ class _AddPersonFormState extends State<AddPersonForm> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  if (_patientFormKey.currentState!.validate()) {
-                    _addInfo();
+                  if (_exerciceFormKey.currentState!.validate()) {
+                    _addExo();
                     Navigator.of(context).pop();
                   }
                 },

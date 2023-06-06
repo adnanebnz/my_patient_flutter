@@ -3,26 +3,33 @@ import 'package:hive_flutter/adapters.dart';
 
 part 'patient.g.dart';
 
-@HiveType(typeId: 1)
-class Patient {
+@HiveType(typeId: 0)
+class Patient extends HiveObject {
   @HiveField(0)
   String name;
   @HiveField(1)
   String age;
   @HiveField(2)
-  String exercise;
-  @HiveField(3)
-  String duration;
-  @HiveField(4)
-  bool isActive = false;
-  @HiveField(5)
   String disease;
+  @HiveField(3)
+  bool isActive = false;
+  @HiveField(4)
+  List<Exercise?>? exercises;
 
   Patient(
       {required this.name,
+      required this.exercises,
       required this.age,
-      required this.exercise,
-      required this.duration,
       required this.isActive,
       required this.disease});
+}
+
+@HiveType(typeId: 1)
+class Exercise extends HiveObject {
+  @HiveField(0)
+  String name;
+  @HiveField(1)
+  String duration;
+
+  Exercise({required this.name, required this.duration});
 }

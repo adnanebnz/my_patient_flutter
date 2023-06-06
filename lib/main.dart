@@ -7,7 +7,9 @@ import 'package:myPatient/screens/splash_screen.dart';
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(PatientAdapter());
+  Hive.registerAdapter(ExerciseAdapter());
   await Hive.openBox('patients');
+  await Hive.openBox('exercises');
   await Alarm.init();
   runApp(const MyApp());
 }

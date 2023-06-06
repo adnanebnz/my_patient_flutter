@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
-import 'package:myPatient/screens/info_screen.dart';
-
 import '../models/patient.dart';
 
 class UpdatePersonForm extends StatefulWidget {
@@ -15,15 +13,10 @@ class UpdatePersonForm extends StatefulWidget {
 }
 
 class _AddPersonFormState extends State<UpdatePersonForm> {
-  // ignore: prefer_typing_uninitialized_variables
   late final _nameController;
-  // ignore: prefer_typing_uninitialized_variables
   late final _ageController;
-  // ignore: prefer_typing_uninitialized_variables
   late final _exerciseController;
-  // ignore: prefer_typing_uninitialized_variables
   late final _durationController;
-  // ignore: prefer_typing_uninitialized_variables
   late final _diseaseController;
   final _patientFormKey = GlobalKey<FormState>();
 
@@ -58,8 +51,7 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
     _exerciseController = TextEditingController(text: widget.patient.exercise);
     _durationController =
         TextEditingController(text: widget.patient.duration.toString());
-    _diseaseController =
-        TextEditingController(text: widget.patient.disease).toString();
+    _diseaseController = TextEditingController(text: widget.patient.disease);
   }
 
   @override
@@ -89,9 +81,9 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
           const SizedBox(
             height: 24.0,
           ),
-          const Text('Exercice'),
+          const Text('Maladie'),
           TextFormField(
-            controller: _exerciseController,
+            controller: _diseaseController,
             validator: _fieldValidator,
           ),
           const SizedBox(

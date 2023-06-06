@@ -19,11 +19,6 @@ class _InfoPageState extends State<InfoPage> {
   bool value = false;
   String searchText = '';
   final _nameController = TextEditingController();
-  _setIsActive(int index, bool isActive) async {
-    Patient patient = box.getAt(index);
-    patient.isActive = isActive;
-    await box.putAt(index, patient);
-  }
 
   _deleteInfo(int index) async {
     await box.deleteAt(index);
@@ -241,9 +236,7 @@ class _InfoPageState extends State<InfoPage> {
                                                                         const EdgeInsets.all(
                                                                             8.0),
                                                                     child: Text(
-                                                                      patient.age
-                                                                              .toString() +
-                                                                          " ans",
+                                                                      "${patient.age} ans",
                                                                       style: const TextStyle(
                                                                           fontSize:
                                                                               15,
@@ -284,9 +277,7 @@ class _InfoPageState extends State<InfoPage> {
                                                                     0.0,
                                                                     10.0),
                                                             child: Text(
-                                                                "Maladie: " +
-                                                                    patient
-                                                                        .disease,
+                                                                "Maladie: ${patient.disease}",
                                                                 style: const TextStyle(
                                                                     fontSize:
                                                                         16,

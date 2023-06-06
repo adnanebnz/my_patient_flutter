@@ -13,10 +13,15 @@ class UpdatePersonForm extends StatefulWidget {
 }
 
 class _AddPersonFormState extends State<UpdatePersonForm> {
+  // ignore: prefer_typing_uninitialized_variables
   late final _nameController;
+  // ignore: prefer_typing_uninitialized_variables
   late final _ageController;
+  // ignore: prefer_typing_uninitialized_variables
   late final _exerciseController;
+  // ignore: prefer_typing_uninitialized_variables
   late final _durationController;
+  // ignore: prefer_typing_uninitialized_variables
   late final _diseaseController;
   final _patientFormKey = GlobalKey<FormState>();
 

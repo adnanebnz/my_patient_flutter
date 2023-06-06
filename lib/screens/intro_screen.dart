@@ -3,6 +3,8 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:myPatient/screens/info_screen.dart';
 
 class IntroScreen extends StatefulWidget {
+  const IntroScreen({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _IntroScreen();
@@ -83,17 +85,17 @@ class _IntroScreen extends State<IntroScreen> {
   void goHomePage(context) {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) {
-      return InfoPage();
+      return const InfoPage();
     }), (Route<dynamic> route) => false);
   }
 }
 
 Widget intoImage(String assetName) {
   return Align(
+    alignment: Alignment.bottomCenter,
     child: Image.asset(
-      '$assetName',
+      assetName,
       width: 300,
     ),
-    alignment: Alignment.bottomCenter,
   );
 }

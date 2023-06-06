@@ -1,7 +1,3 @@
-/**
- * Splash screen is the page that show when we open the app
- */
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -21,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(
         const Duration(seconds: 3),
         () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => IntroScreen(),
+              builder: (context) => const IntroScreen(),
             )));
   }
 

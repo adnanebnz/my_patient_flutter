@@ -6,7 +6,6 @@ import 'package:myPatient/models/patient.dart';
 import 'package:myPatient/screens/active_patients_screen.dart';
 import 'package:myPatient/screens/add_patient_screen.dart';
 import 'package:myPatient/screens/update_patient_screen.dart';
-import 'package:alarm/alarm.dart';
 
 class InfoPage extends StatefulWidget {
   const InfoPage({super.key});
@@ -18,7 +17,6 @@ class InfoPage extends StatefulWidget {
 class _InfoPageState extends State<InfoPage> {
   late final Box box;
   bool value = false;
-  DateTime now = DateTime.now();
 
   _setIsActive(int index, bool isActive) async {
     Patient patient = box.getAt(index);
@@ -93,7 +91,7 @@ class _InfoPageState extends State<InfoPage> {
                                                       fontWeight:
                                                           FontWeight.bold)),
                                               subtitle: Text(
-                                                  "Excercice: ${patient.exercise}",
+                                                  "Maladie: ${patient.disease}",
                                                   style: const TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
@@ -131,51 +129,6 @@ class _InfoPageState extends State<InfoPage> {
                                                   ),
                                                 ],
                                               ),
-                                            ),
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                    "Durée: ${patient.duration} min"),
-                                                IconButton(
-                                                  onPressed: () async => {
-                                                    await Alarm.set(
-                                                            alarmSettings: AlarmSettings(
-                                                                id: index,
-                                                                dateTime: DateTime(
-                                                                    now.year,
-                                                                    now.month,
-                                                                    now.day,
-                                                                    now.hour,
-                                                                    now.minute +
-                                                                        int.parse(patient
-                                                                            .duration)),
-                                                                assetAudioPath:
-                                                                    "assets/alarm.mp3",
-                                                                enableNotificationOnKill:
-                                                                    true,
-                                                                notificationBody:
-                                                                    "Exercise terminé",
-                                                                notificationTitle:
-                                                                    "Exercise terminé pour ${patient.name}",
-                                                                vibrate: true))
-                                                        .then((value) => {})
-                                                  },
-                                                  icon: const Icon(Icons.alarm),
-                                                  color: Colors.red[900],
-                                                ),
-                                                IconButton(
-                                                    onPressed: () async => {
-                                                          await Alarm.stop(
-                                                              index)
-                                                        },
-                                                    icon: const Icon(
-                                                        Icons.alarm_off),
-                                                    color: Colors.red[900])
-                                              ],
                                             ),
                                           ],
                                         ),

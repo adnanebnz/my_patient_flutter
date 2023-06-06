@@ -82,8 +82,10 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
                                   child: Column(
                                     children: [
                                       ListTile(
-                                        title: Text(patient.name),
-                                        subtitle: Text(patient.age.toString()),
+                                        title: Text(patient.name +
+                                            " / " +
+                                            patient.age.toString() +
+                                            " ans"),
                                         trailing: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
@@ -99,6 +101,17 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
                                           ],
                                         ),
                                       ),
+                                      ListView.builder(
+                                          itemCount: patient.exercises?.length,
+                                          itemBuilder: (context, index) {
+                                            return ListTile(
+                                              title: Text(patient
+                                                  .exercises[index].name),
+                                              subtitle: Text(patient
+                                                  .exercises[index].duration
+                                                  .toString()),
+                                            );
+                                          }),
                                       Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,

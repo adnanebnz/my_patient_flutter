@@ -16,8 +16,10 @@ class _AddPersonFormState extends State<AddPersonForm> {
   final _ageController = TextEditingController();
   final _diseaseController = TextEditingController();
   final _patientFormKey = GlobalKey<FormState>();
-
+  bool addExercise = false;
   late final Box box;
+  late final Box exerciseBox;
+  List<Exercise> selectedExercises = [];
 
   String? _fieldValidator(String? value) {
     if (value == null || value.isEmpty) {
@@ -32,9 +34,10 @@ class _AddPersonFormState extends State<AddPersonForm> {
       age: _ageController.text,
       isActive: false,
       disease: _diseaseController.text,
-      exercises: [],
+      exercises: selectedExercises,
     );
-    box.add(newPerson);
+
+    await box.add(newPerson);
     // ignore: avoid_print
     print('Added successfully');
   }
@@ -43,6 +46,7 @@ class _AddPersonFormState extends State<AddPersonForm> {
   void initState() {
     super.initState();
     box = Hive.box('patients');
+    exerciseBox = Hive.box('exercises');
   }
 
   @override
@@ -76,6 +80,32 @@ class _AddPersonFormState extends State<AddPersonForm> {
           TextFormField(
             controller: _diseaseController,
             validator: _fieldValidator,
+          ),
+          // fetch exercises from hive and display them as options
+          const SizedBox(
+            height: 24.0,
+          ),
+          const Text('Exercices'),
+          Expanded(
+            child: ListView.builder(
+              itemCount: exerciseBox.length,
+              itemBuilder: (context, index) {
+                Exercise exercise = exerciseBox.getAt(index);
+                return CheckboxListTile(
+                  title: Text(exercise.name),
+                  value: selectedExercises.contains(exercise),
+                  onChanged: (value) {
+                    setState(() {
+                      if (value == true) {
+                        selectedExercises.add(exercise);
+                      } else {
+                        selectedExercises.remove(exercise);
+                      }
+                    });
+                  },
+                );
+              },
+            ),
           ),
           const Spacer(),
           Padding(

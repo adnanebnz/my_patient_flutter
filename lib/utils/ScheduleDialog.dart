@@ -42,44 +42,51 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      icon: const Icon(
+        Icons.alarm,
+        color: Colors.green,
+      ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 4,
       title: const Text('Planifier des alarmes'),
-      content: Column(
-        children: [
-          Text('Exercises for ${widget.patient.name}:'),
-          Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: widget.patient.exercises?.length ?? 0,
-              itemBuilder: (context, index) {
-                final exercise = widget.patient.exercises?[index];
-                return Padding(
-                  padding: const EdgeInsets.only(top: 12.0),
-                  child: ListTile(
-                    title: Text(exercise?.name ?? ''),
-                    subtitle:
-                        Text('Duration: ${exercise?.duration ?? ''} minutes'),
-                    onTap: () {
-                      setState(() {
-                        if (selectedExercisesArray!.contains(exercise)) {
-                          selectedExercisesArray!.remove(exercise);
-                        } else {
-                          selectedExercisesArray!.add(exercise!);
-                        }
-                      });
-                    },
-                    selected: selectedExercisesArray!.contains(exercise),
-                    selectedTileColor: Colors.grey[100],
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    selectedColor: Colors.green,
-                  ),
-                );
-              },
+      content: Container(
+        height: 270,
+        child: Column(
+          children: [
+            Text('Exercices pour ${widget.patient.name}:'),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: widget.patient.exercises?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final exercise = widget.patient.exercises?[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: ListTile(
+                      title: Text(exercise?.name ?? ''),
+                      subtitle:
+                          Text('Duration: ${exercise?.duration ?? ''} minutes'),
+                      onTap: () {
+                        setState(() {
+                          if (selectedExercisesArray!.contains(exercise)) {
+                            selectedExercisesArray!.remove(exercise);
+                          } else {
+                            selectedExercisesArray!.add(exercise!);
+                          }
+                        });
+                      },
+                      selected: selectedExercisesArray!.contains(exercise),
+                      selectedTileColor: Colors.grey[100],
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      selectedColor: Colors.green,
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       actions: [
         TextButton(
@@ -93,6 +100,15 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
               scheduleExerciseAlarm(
                   exercise.name, int.parse(exercise.duration));
             }
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                behavior: SnackBarBehavior.floating,
+                showCloseIcon: true,
+                closeIconColor: Colors.white,
+                content: Text('Alarmes planifiées avec succès'),
+                duration: Duration(seconds: 2),
+              ),
+            );
             Navigator.pop(context); // Close the dialog
           },
           child: const Text('PLANIFIER'),

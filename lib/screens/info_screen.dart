@@ -175,6 +175,7 @@ class _InfoPageState extends State<InfoPage> {
                                                                                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                                                                                   showCloseIcon: true,
                                                                                   behavior: SnackBarBehavior.floating,
+                                                                                  closeIconColor: Colors.white,
                                                                                   content: Text('Patient supprimé'),
                                                                                   duration: Duration(seconds: 2),
                                                                                 )),

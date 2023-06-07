@@ -126,6 +126,7 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         behavior: SnackBarBehavior.floating,
+                        closeIconColor: Colors.white,
                         showCloseIcon: true,
                         content: Text('Patient modifié avec succès'),
                       ),

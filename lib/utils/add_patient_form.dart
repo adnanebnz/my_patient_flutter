@@ -125,6 +125,7 @@ class _AddPersonFormState extends State<AddPersonForm> {
                       const SnackBar(
                         behavior: SnackBarBehavior.floating,
                         showCloseIcon: true,
+                        closeIconColor: Colors.white,
                         content: Text('Patient ajoutée avec succès'),
                       ),
                     );

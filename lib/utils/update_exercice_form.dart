@@ -88,6 +88,7 @@ class _UpdateExerciceFormState extends State<UpdateExerciceForm> {
                       const SnackBar(
                         showCloseIcon: true,
                         behavior: SnackBarBehavior.floating,
+                        closeIconColor: Colors.white,
                         content: Text('Exercice modifié avec succès'),
                       ),
                     );

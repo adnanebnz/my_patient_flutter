@@ -27,41 +27,44 @@ class _CancelScheduleWidgetState extends State<CancelScheduleWidget> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 4,
       title: const Text('Annuler les alarmes'),
-      content: Column(
-        children: [
-          Text('Exercises for ${widget.patient.name}:'),
-          Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: widget.patient.exercises?.length ?? 0,
-              itemBuilder: (context, index) {
-                final exercise = widget.patient.exercises?[index];
-                return Padding(
-                  padding: const EdgeInsets.only(top: 12.0),
-                  child: ListTile(
-                    title: Text(exercise?.name ?? ''),
-                    subtitle:
-                        Text('Duration: ${exercise?.duration ?? ''} minutes'),
-                    onTap: () {
-                      setState(() {
-                        if (selectedExercises!.contains(exercise)) {
-                          selectedExercises!.remove(exercise);
-                        } else {
-                          selectedExercises!.add(exercise!);
-                        }
-                      });
-                    },
-                    selected: selectedExercises!.contains(exercise),
-                    selectedTileColor: Colors.grey[100],
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    selectedColor: Colors.green,
-                  ),
-                );
-              },
+      content: Container(
+        height: 270,
+        child: Column(
+          children: [
+            Text('Exercices pour ${widget.patient.name}:'),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: widget.patient.exercises?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final exercise = widget.patient.exercises?[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: ListTile(
+                      title: Text(exercise?.name ?? ''),
+                      subtitle:
+                          Text('Duration: ${exercise?.duration ?? ''} minutes'),
+                      onTap: () {
+                        setState(() {
+                          if (selectedExercises!.contains(exercise)) {
+                            selectedExercises!.remove(exercise);
+                          } else {
+                            selectedExercises!.add(exercise!);
+                          }
+                        });
+                      },
+                      selected: selectedExercises!.contains(exercise),
+                      selectedTileColor: Colors.grey[100],
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      selectedColor: Colors.green,
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       actions: [
         TextButton(
@@ -70,6 +73,15 @@ class _CancelScheduleWidgetState extends State<CancelScheduleWidget> {
             for (final exercise in selectedExercises!) {
               cancelScheduleExerciseAlarm(exercise.name);
             }
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                behavior: SnackBarBehavior.floating,
+                showCloseIcon: true,
+                closeIconColor: Colors.white,
+                content: Text('Alarmes annulées'),
+                duration: Duration(seconds: 2),
+              ),
+            );
             Navigator.pop(context); // Close the dialog
           },
           child: const Text('CONFIRMER'),

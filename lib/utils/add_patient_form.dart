@@ -85,25 +85,29 @@ class _AddPersonFormState extends State<AddPersonForm> {
           const SizedBox(
             height: 24.0,
           ),
-          const Text('Exercices'),
           Expanded(
             child: ListView.builder(
               itemCount: exerciseBox.length,
               itemBuilder: (context, index) {
                 Exercise exercise = exerciseBox.getAt(index);
-                return CheckboxListTile(
-                  title: Text(exercise.name),
-                  value: selectedExercises.contains(exercise),
-                  onChanged: (value) {
-                    setState(() {
-                      if (value == true) {
-                        selectedExercises.add(exercise);
-                      } else {
-                        selectedExercises.remove(exercise);
-                      }
-                    });
-                  },
-                );
+                // ignore: unnecessary_null_comparison
+                if (exerciseBox.isEmpty) {
+                  return const SizedBox.shrink();
+                } else {
+                  return CheckboxListTile(
+                    title: Text(exercise.name),
+                    value: selectedExercises.contains(exercise),
+                    onChanged: (value) {
+                      setState(() {
+                        if (value == true) {
+                          selectedExercises.add(exercise);
+                        } else {
+                          selectedExercises.remove(exercise);
+                        }
+                      });
+                    },
+                  );
+                }
               },
             ),
           ),
@@ -117,6 +121,13 @@ class _AddPersonFormState extends State<AddPersonForm> {
                 onPressed: () {
                   if (_patientFormKey.currentState!.validate()) {
                     _addInfo();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        behavior: SnackBarBehavior.floating,
+                        showCloseIcon: true,
+                        content: Text('Patient ajoutée avec succès'),
+                      ),
+                    );
                     Navigator.of(context).pop();
                   }
                 },

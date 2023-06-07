@@ -132,196 +132,175 @@ class _InfoPageState extends State<InfoPage> {
                                                         const EdgeInsets.all(
                                                             8.0),
                                                     child: Dismissible(
-                                                      confirmDismiss:
-                                                          (direction) async {
-                                                        if (direction ==
-                                                            DismissDirection
-                                                                .endToStart) {
-                                                          return await showDialog(
-                                                              context: context,
-                                                              builder:
-                                                                  (context) {
-                                                                return AlertDialog(
-                                                                  shape: RoundedRectangleBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10)),
-                                                                  elevation: 5,
-                                                                  icon:
-                                                                      const Icon(
-                                                                    Icons
-                                                                        .warning,
-                                                                    color: Colors
-                                                                        .red,
-                                                                    size: 30,
-                                                                  ),
-                                                                  title: const Text(
-                                                                      'Supprimer'),
-                                                                  content:
-                                                                      const Text(
-                                                                          'Voulez-vous supprimer ce patient?'),
-                                                                  actions: [
-                                                                    TextButton(
-                                                                        onPressed: () => Navigator.pop(
-                                                                            context,
-                                                                            false),
-                                                                        child: const Text(
-                                                                            'NON')),
-                                                                    TextButton(
-                                                                        onPressed:
-                                                                            () =>
-                                                                                {
-                                                                                  _deleteInfo(index),
-                                                                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                                                                    content: Text('Patient supprimé'),
-                                                                                    duration: Duration(seconds: 2),
-                                                                                  )),
-                                                                                  Navigator.pop(context, true)
-                                                                                },
-                                                                        child: const Text(
-                                                                            'OUI')),
-                                                                  ],
-                                                                );
-                                                              });
-                                                        } else {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          UpdatePatientPage(
-                                                                            index:
-                                                                                index,
-                                                                            patient:
-                                                                                patient,
-                                                                          )));
-                                                          return false;
-                                                        }
-                                                      },
-                                                      secondaryBackground:
-                                                          Container(
-                                                        alignment: Alignment
-                                                            .centerRight,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                right: 15),
-                                                        color: Colors.red,
-                                                        child: const Icon(
-                                                          Icons.delete,
-                                                          color: Colors.white,
-                                                          size: 30,
-                                                        ),
-                                                      ),
-                                                      background: Container(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(left: 15),
-                                                        color: Colors.green,
-                                                        child: const Icon(
-                                                          Icons.edit,
-                                                          color: Colors.white,
-                                                          size: 30,
-                                                        ),
-                                                      ),
-                                                      key: UniqueKey(),
-                                                      child: Card(
-                                                        surfaceTintColor:
-                                                            Colors.green,
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10)),
-                                                        elevation: 4,
-                                                        child: Column(
-                                                          children: [
-                                                            Row(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Column(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    Padding(
-                                                                      padding: const EdgeInsets
-                                                                              .fromLTRB(
-                                                                          8.0,
-                                                                          8.0,
-                                                                          8.0,
-                                                                          0.0),
-                                                                      child:
-                                                                          Text(
-                                                                        patient
-                                                                            .name,
-                                                                        style: const TextStyle(
-                                                                            fontSize:
-                                                                                15,
-                                                                            fontWeight:
-                                                                                FontWeight.bold),
-                                                                      ),
+                                                        confirmDismiss:
+                                                            (direction) async {
+                                                          if (direction ==
+                                                              DismissDirection
+                                                                  .endToStart) {
+                                                            return await showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (context) {
+                                                                  return AlertDialog(
+                                                                    shape: RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10)),
+                                                                    elevation:
+                                                                        5,
+                                                                    icon:
+                                                                        const Icon(
+                                                                      Icons
+                                                                          .warning,
+                                                                      color: Colors
+                                                                          .red,
+                                                                      size: 30,
                                                                     ),
-                                                                    Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          Text(
-                                                                        "${patient.age} ans",
-                                                                        style: const TextStyle(
-                                                                            fontSize:
-                                                                                15,
-                                                                            fontWeight:
-                                                                                FontWeight.bold),
-                                                                      ),
+                                                                    title: const Text(
+                                                                        'Supprimer'),
+                                                                    content:
+                                                                        const Text(
+                                                                            'Voulez-vous supprimer ce patient?'),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                          onPressed: () => Navigator.pop(
+                                                                              context,
+                                                                              false),
+                                                                          child:
+                                                                              const Text('NON')),
+                                                                      TextButton(
+                                                                          onPressed: () =>
+                                                                              {
+                                                                                _deleteInfo(index),
+                                                                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                                  showCloseIcon: true,
+                                                                                  behavior: SnackBarBehavior.floating,
+                                                                                  content: Text('Patient supprimé'),
+                                                                                  duration: Duration(seconds: 2),
+                                                                                )),
+                                                                                Navigator.pop(context, true)
+                                                                              },
+                                                                          child:
+                                                                              const Text('OUI')),
+                                                                    ],
+                                                                  );
+                                                                });
+                                                          } else {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            UpdatePatientPage(
+                                                                              index: index,
+                                                                              patient: patient,
+                                                                            )));
+                                                            return false;
+                                                          }
+                                                        },
+                                                        secondaryBackground:
+                                                            Container(
+                                                          alignment: Alignment
+                                                              .centerRight,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  right: 15),
+                                                          color: Colors.red,
+                                                          child: const Icon(
+                                                            Icons.delete,
+                                                            color: Colors.white,
+                                                            size: 30,
+                                                          ),
+                                                        ),
+                                                        background: Container(
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 15),
+                                                          color: Colors.green,
+                                                          child: const Icon(
+                                                            Icons.edit,
+                                                            color: Colors.white,
+                                                            size: 30,
+                                                          ),
+                                                        ),
+                                                        key: UniqueKey(),
+                                                        child: Card(
+                                                          surfaceTintColor:
+                                                              Colors.green,
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                          elevation: 4,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(11.0),
+                                                            child: Column(
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Text(
+                                                                      "${patient.name} / ${patient.age} ans",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              15,
+                                                                          fontWeight:
+                                                                              FontWeight.w500),
+                                                                    ),
+                                                                    Column(
+                                                                      children: [
+                                                                        const Padding(
+                                                                          padding:
+                                                                              EdgeInsets.only(top: 8.0),
+                                                                          child: Text(
+                                                                              "Présent?",
+                                                                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400)),
+                                                                        ),
+                                                                        Switch.adaptive(
+                                                                            activeColor: Colors.green,
+                                                                            value: patient.isActive,
+                                                                            onChanged: (value) => {
+                                                                                  setState(() {
+                                                                                    patient.isActive = value;
+                                                                                  })
+                                                                                }),
+                                                                      ],
                                                                     ),
                                                                   ],
                                                                 ),
+                                                                const Divider(
+                                                                  height: 0,
+                                                                  thickness: 1,
+                                                                ),
                                                                 Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.fromLTRB(
-                                                                            0.0,
-                                                                            8.0,
-                                                                            0.0,
-                                                                            8.0),
-                                                                    child: Switch.adaptive(
-                                                                        activeColor: Colors.green,
-                                                                        value: patient.isActive,
-                                                                        onChanged: (value) => {
-                                                                              setState(() {
-                                                                                patient.isActive = value;
-                                                                              })
-                                                                            })),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .fromLTRB(
+                                                                          0.0,
+                                                                          12.0,
+                                                                          0.0,
+                                                                          12.0),
+                                                                  child: Text(
+                                                                      "Maladie: ${patient.disease}",
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          color:
+                                                                              Colors.black87)),
+                                                                ),
                                                               ],
                                                             ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .fromLTRB(
-                                                                      0.0,
-                                                                      0.0,
-                                                                      0.0,
-                                                                      10.0),
-                                                              child: Text(
-                                                                  "Maladie: ${patient.disease}",
-                                                                  style: const TextStyle(
-                                                                      fontSize:
-                                                                          16,
-                                                                      color: Colors
-                                                                          .black87)),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    )),
+                                                          ),
+                                                        ))),
                                             ],
                                           );
                                         }),

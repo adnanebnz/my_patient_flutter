@@ -89,6 +89,15 @@ class _exercisesListPageState extends State<exercisesListPage> {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            elevation: 5,
+                                            icon: const Icon(
+                                              Icons.warning,
+                                              color: Colors.red,
+                                              size: 30,
+                                            ),
                                             title: const Text(
                                                 "Supprimer l'exercice"),
                                             content: const Text(

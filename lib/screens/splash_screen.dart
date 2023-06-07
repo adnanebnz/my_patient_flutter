@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:myPatient/screens/info_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:myPatient/screens/intro_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,14 +12,41 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Future<bool> checkFirstSeen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? seen = prefs.getBool('seen');
+    if (seen == null || !seen) {
+      // First time opening the app, show intro screen
+      await prefs.setBool('seen', true);
+      return false;
+    } else {
+      // Not the first time, skip intro screen
+      return true;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(
-        const Duration(seconds: 3),
-        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => const InfoPage(),
-            )));
+    checkFirstSeen().then((bool isFirstTime) {
+      if (isFirstTime) {
+        // Not the first time, navigate directly to the InfoPage
+        Future.delayed(
+          const Duration(seconds: 2),
+          () => Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const InfoPage()),
+          ),
+        );
+      } else {
+        // First time, show the intro screen
+        Future.delayed(
+          const Duration(seconds: 2),
+          () => Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const IntroScreen()),
+          ),
+        );
+      }
+    });
   }
 
   @override
@@ -26,8 +55,8 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Image.asset(
           "assets/images/logo.png",
-          width: 100,
-          height: 100,
+          width: 220,
+          height: 220,
         ),
       ),
     );

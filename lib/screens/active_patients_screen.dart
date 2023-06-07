@@ -81,7 +81,11 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
                                 return Column(
                                   children: [
                                     Card(
-                                      elevation: 6.0,
+                                      surfaceTintColor: Colors.green,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      elevation: 4,
                                       child: Padding(
                                         padding: const EdgeInsets.all(11.0),
                                         child: Column(
@@ -92,15 +96,35 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
                                                       .spaceBetween,
                                               children: [
                                                 Text(
-                                                    "${patient.name} / ${patient.age} ans"),
-                                                Switch.adaptive(
-                                                  activeColor: Colors.green,
-                                                  value: patient.isActive,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      patient.isActive = value;
-                                                    });
-                                                  },
+                                                  "${patient.name} / ${patient.age} ans",
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    const Padding(
+                                                      padding: EdgeInsets.only(
+                                                          top: 8.0),
+                                                      child: Text("Présent?",
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400)),
+                                                    ),
+                                                    Switch.adaptive(
+                                                      activeColor: Colors.green,
+                                                      value: patient.isActive,
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          patient.isActive =
+                                                              value;
+                                                        });
+                                                      },
+                                                    ),
+                                                  ],
                                                 )
                                               ],
                                             ),

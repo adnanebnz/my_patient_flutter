@@ -86,6 +86,8 @@ class _UpdateExerciceFormState extends State<UpdateExerciceForm> {
                     _updateExo();
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
+                        showCloseIcon: true,
+                        behavior: SnackBarBehavior.floating,
                         content: Text('Exercice modifié avec succès'),
                       ),
                     );

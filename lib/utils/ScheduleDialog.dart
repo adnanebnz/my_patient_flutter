@@ -41,6 +41,7 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return AlertDialog(
       icon: const Icon(
         Icons.alarm,
@@ -51,6 +52,7 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
       title: const Text('Planifier des alarmes'),
       content: SizedBox(
         height: 270,
+        width: size.width * 0.7,
         child: Column(
           children: [
             Text('Exercices pour ${widget.patient.name}:'),

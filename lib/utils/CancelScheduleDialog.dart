@@ -22,6 +22,7 @@ class _CancelScheduleWidgetState extends State<CancelScheduleWidget> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return AlertDialog(
       icon: const Icon(Icons.warning, color: Colors.red),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -29,12 +30,13 @@ class _CancelScheduleWidgetState extends State<CancelScheduleWidget> {
       title: const Text('Annuler les alarmes'),
       content: SizedBox(
         height: 270,
+        width: size.width * 0.7,
         child: Column(
           children: [
             Text('Exercices pour ${widget.patient.name}:'),
             Expanded(
               child: ListView.builder(
-                shrinkWrap: true,
+                //shrinkWrap: true,
                 itemCount: widget.patient.exercises?.length ?? 0,
                 itemBuilder: (context, index) {
                   final exercise = widget.patient.exercises?[index];

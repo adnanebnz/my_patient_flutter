@@ -1,4 +1,4 @@
-# myPatient
+# MyPatient
 
 A new Flutter project.
 

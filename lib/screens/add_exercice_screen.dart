@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myPatient/utils/add_exercice_form.dart';
+import 'package:MyPatient/utils/add_exercice_form.dart';
 
 class AddExercicePage extends StatefulWidget {
   const AddExercicePage({super.key});

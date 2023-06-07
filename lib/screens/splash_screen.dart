@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:myPatient/screens/info_screen.dart';
+import 'package:MyPatient/screens/info_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:myPatient/screens/intro_screen.dart';
+import 'package:MyPatient/screens/intro_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:myPatient/models/patient.dart';
+import 'package:MyPatient/models/patient.dart';
 import 'package:alarm/alarm.dart';
 
 class ActivePatientsPage extends StatefulWidget {
@@ -15,6 +15,20 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
   String searchText = '';
   final TextEditingController _nameController = TextEditingController();
   DateTime now = DateTime.now();
+  _setIsDone(index) async {
+    final patient = box.getAt(index) as Patient;
+    final exercises = patient.exercises;
+    for (var i = 0; i < exercises!.length; i++) {
+      final exercise = exercises[i];
+      if (exercise!.isDone == false) {
+        final exerciseTime = DateTime.parse(exercise.duration);
+        if (now.isAfter(exerciseTime)) {
+          exercise.isDone = true;
+          await exercise.save();
+        }
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -55,7 +69,7 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
                           size: 20,
                           color: Colors.black54,
                         ),
-                        hintText: "Rechercher un patient",
+                        hintText: "Rechercher un patient active",
                         hintStyle:
                             MaterialStateProperty.resolveWith<TextStyle?>(
                           (states) {
@@ -97,7 +111,7 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
                                               children: [
                                                 Text(
                                                   "${patient.name} / ${patient.age} ans",
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       fontSize: 15,
                                                       fontWeight:
                                                           FontWeight.w500),
@@ -143,9 +157,18 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
                                                     patient.exercises?[index];
                                                 return ListTile(
                                                   title: Text(
-                                                      exercise?.name ?? ''),
+                                                    exercise?.name ?? '',
+                                                    style: TextStyle(
+                                                      decoration:
+                                                          exercise?.isDone ==
+                                                                  true
+                                                              ? TextDecoration
+                                                                  .lineThrough
+                                                              : null,
+                                                    ),
+                                                  ),
                                                   subtitle: Text(
-                                                      "Durée : ${exercise!.duration} mins"),
+                                                      "Durée : ${exercise?.duration} mins"),
                                                   trailing: Row(
                                                     mainAxisSize:
                                                         MainAxisSize.min,
@@ -156,24 +179,37 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
                                                                     await Alarm.set(
                                                                             alarmSettings: AlarmSettings(
                                                                                 id: index,
-                                                                                dateTime: DateTime(now.year, now.month, now.day, now.hour, now.minute + int.parse(exercise.duration)),
+                                                                                dateTime: DateTime(now.year, now.month, now.day, now.hour, now.minute + int.parse(exercise!.duration)),
                                                                                 assetAudioPath: "assets/alarm.mp3",
                                                                                 enableNotificationOnKill: true,
                                                                                 notificationBody: "Exercise terminé",
                                                                                 notificationTitle: "Exercise terminé pour ${patient.name}",
                                                                                 vibrate: true))
-                                                                        .then((value) => {})
+                                                                        .then((value) => {
+                                                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(behavior: SnackBarBehavior.floating, showCloseIcon: true, content: Text("Alarme programmée pour ${patient.name}")))
+                                                                            }),
+                                                                    if (await Alarm
+                                                                        .isRinging(
+                                                                            index))
+                                                                      {
+                                                                        _setIsDone(
+                                                                            index),
+                                                                      }
                                                                   },
                                                           icon: const Icon(
                                                             Icons.alarm,
                                                             color: Colors.green,
                                                           )),
                                                       IconButton(
-                                                          onPressed: () async =>
-                                                              {
-                                                                await Alarm
-                                                                    .stop(index)
-                                                              },
+                                                          onPressed:
+                                                              () async => {
+                                                                    await Alarm.stop(
+                                                                            index)
+                                                                        .then((value) =>
+                                                                            {
+                                                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(behavior: SnackBarBehavior.floating, showCloseIcon: true, content: Text("Alarme annulée pour ${patient.name}")))
+                                                                            })
+                                                                  },
                                                           icon: const Icon(
                                                             Icons.alarm_off,
                                                             color: Colors.red,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:myPatient/models/patient.dart';
+import 'package:MyPatient/models/patient.dart';
 import 'package:alarm/alarm.dart';
-import 'package:myPatient/screens/splash_screen.dart';
+import 'package:MyPatient/screens/splash_screen.dart';
 
 void main() async {
   await Hive.initFlutter();

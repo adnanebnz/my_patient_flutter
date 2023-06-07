@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myPatient/models/patient.dart';
-import 'package:myPatient/utils/update_exercice_form.dart';
+import 'package:MyPatient/models/patient.dart';
+import 'package:MyPatient/utils/update_exercice_form.dart';
 
 class UpdateExercisePage extends StatefulWidget {
   const UpdateExercisePage(

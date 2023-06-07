@@ -1,6 +1,6 @@
 {
-    "name": "myPatient",
-    "short_name": "myPatient",
+    "name": "MyPatient",
+    "short_name": "MyPatient",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#hexcode",

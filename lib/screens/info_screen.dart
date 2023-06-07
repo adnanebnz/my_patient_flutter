@@ -3,12 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:myPatient/models/patient.dart';
-import 'package:myPatient/screens/active_patients_screen.dart';
-import 'package:myPatient/screens/add_exercice_screen.dart';
-import 'package:myPatient/screens/add_patient_screen.dart';
-import 'package:myPatient/screens/exercices_list_screen.dart';
-import 'package:myPatient/screens/update_patient_screen.dart';
+import 'package:MyPatient/models/patient.dart';
+import 'package:MyPatient/screens/active_patients_screen.dart';
+import 'package:MyPatient/screens/add_exercice_screen.dart';
+import 'package:MyPatient/screens/add_patient_screen.dart';
+import 'package:MyPatient/screens/exercices_list_screen.dart';
+import 'package:MyPatient/screens/update_patient_screen.dart';
 
 class InfoPage extends StatefulWidget {
   const InfoPage({super.key});
@@ -250,7 +250,7 @@ class _InfoPageState extends State<InfoPage> {
                                                                   children: [
                                                                     Text(
                                                                       "${patient.name} / ${patient.age} ans",
-                                                                      style: TextStyle(
+                                                                      style: const TextStyle(
                                                                           fontSize:
                                                                               15,
                                                                           fontWeight:

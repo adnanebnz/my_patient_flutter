@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:myPatient/models/patient.dart';
-import 'package:myPatient/screens/update_exercise_screen.dart';
+import 'package:MyPatient/models/patient.dart';
+import 'package:MyPatient/screens/update_exercise_screen.dart';
 
 // ignore: camel_case_types
 class exercisesListPage extends StatefulWidget {
@@ -56,7 +56,7 @@ class _exercisesListPageState extends State<exercisesListPage> {
                           size: 20,
                           color: Colors.black54,
                         ),
-                        hintText: "Rechercher un patient",
+                        hintText: "Rechercher un exercice",
                         hintStyle:
                             MaterialStateProperty.resolveWith<TextStyle?>(
                           (states) {

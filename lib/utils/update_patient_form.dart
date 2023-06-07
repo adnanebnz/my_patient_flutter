@@ -18,14 +18,13 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
   // ignore: prefer_typing_uninitialized_variables
   late final _ageController;
   // ignore: prefer_typing_uninitialized_variables
-  late final _exerciseController;
-  // ignore: prefer_typing_uninitialized_variables
-  late final _durationController;
-  // ignore: prefer_typing_uninitialized_variables
   late final _diseaseController;
   final _patientFormKey = GlobalKey<FormState>();
 
   late final Box box;
+  late final Box exerciseBox;
+
+  List<Exercise> selectedExercises = [];
 
   String? _fieldValidator(String? value) {
     if (value == null || value.isEmpty) {
@@ -36,13 +35,13 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
 
   _updateInfo() async {
     Patient newPerson = Patient(
-        name: _nameController.text,
-        age: _ageController.text,
-        exercise: _exerciseController.text,
-        duration: _durationController.text,
-        isActive: false,
-        disease: _diseaseController.text);
-    box.putAt(widget.index, newPerson);
+      name: _nameController.text,
+      age: _ageController.text,
+      isActive: false,
+      disease: _diseaseController.text,
+      exercises: selectedExercises,
+    );
+    await box.putAt(widget.index, newPerson);
     // ignore: avoid_print
     print('Updated successfully');
   }
@@ -51,11 +50,10 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
   void initState() {
     super.initState();
     box = Hive.box('patients');
+    exerciseBox = Hive.box('exercises');
     _nameController = TextEditingController(text: widget.patient.name);
     _ageController = TextEditingController(text: widget.patient.age.toString());
-    _exerciseController = TextEditingController(text: widget.patient.exercise);
-    _durationController =
-        TextEditingController(text: widget.patient.duration.toString());
+
     _diseaseController = TextEditingController(text: widget.patient.disease);
   }
 
@@ -94,22 +92,26 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
           const SizedBox(
             height: 24.0,
           ),
-          const Text('Exercice'),
-          TextFormField(
-            controller: _exerciseController,
-            validator: _fieldValidator,
-          ),
-          const SizedBox(
-            height: 24.0,
-          ),
-          const Text('Durée'),
-          TextFormField(
-            keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly
-            ],
-            controller: _durationController,
-            validator: _fieldValidator,
+          Expanded(
+            child: ListView.builder(
+              itemCount: exerciseBox.length,
+              itemBuilder: (context, index) {
+                Exercise exercise = exerciseBox.getAt(index);
+                return CheckboxListTile(
+                  title: Text(exercise.name),
+                  value: selectedExercises.contains(exercise),
+                  onChanged: (value) {
+                    setState(() {
+                      if (value == true) {
+                        selectedExercises.add(exercise);
+                      } else {
+                        selectedExercises.remove(exercise);
+                      }
+                    });
+                  },
+                );
+              },
+            ),
           ),
           const Spacer(),
           Padding(
@@ -123,6 +125,9 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
                     _updateInfo();
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
+                        behavior: SnackBarBehavior.floating,
+                        closeIconColor: Colors.white,
+                        showCloseIcon: true,
                         content: Text('Patient modifié avec succès'),
                       ),
                     );

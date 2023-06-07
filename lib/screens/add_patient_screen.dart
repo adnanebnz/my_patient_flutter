@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myPatient/utils/add_patient_form.dart';
+import 'package:MyPatient/utils/add_patient_form.dart';
 
 class AddPatientPage extends StatefulWidget {
   const AddPatientPage({super.key});

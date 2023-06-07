@@ -49,7 +49,7 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 4,
       title: const Text('Planifier des alarmes'),
-      content: Container(
+      content: SizedBox(
         height: 270,
         child: Column(
           children: [

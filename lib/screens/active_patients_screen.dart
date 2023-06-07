@@ -33,6 +33,16 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
           final activePatients =
               patientsBox.values.where((patient) => patient.isActive).toList();
 
+          if (activePatients.isEmpty) {
+            return const Scaffold(
+              body: Center(
+                child: Text(
+                  "Aucun patient n'est actif",
+                ),
+              ),
+            );
+          }
+
           return ListView.builder(
             itemCount: activePatients.length,
             itemBuilder: (context, index) {

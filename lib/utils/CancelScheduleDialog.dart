@@ -27,7 +27,7 @@ class _CancelScheduleWidgetState extends State<CancelScheduleWidget> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 4,
       title: const Text('Annuler les alarmes'),
-      content: Container(
+      content: SizedBox(
         height: 270,
         child: Column(
           children: [

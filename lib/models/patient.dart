@@ -15,10 +15,13 @@ class Patient extends HiveObject {
   bool isActive = false;
   @HiveField(4)
   List<Exercise?>? exercises;
+  @HiveField(5)
+  List<Exercise?>? selectedExercises;
 
   Patient(
       {required this.name,
       required this.exercises,
+      this.selectedExercises,
       required this.age,
       required this.isActive,
       required this.disease});

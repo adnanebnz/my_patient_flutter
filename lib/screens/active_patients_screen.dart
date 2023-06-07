@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/adapters.dart';
-import 'package:MyPatient/models/patient.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:alarm/alarm.dart';
+import 'package:MyPatient/models/patient.dart';
 
 class ActivePatientsPage extends StatefulWidget {
   const ActivePatientsPage({super.key});
@@ -13,22 +14,7 @@ class ActivePatientsPage extends StatefulWidget {
 class _ActivePatientsPageState extends State<ActivePatientsPage> {
   late final Box box;
   String searchText = '';
-  final TextEditingController _nameController = TextEditingController();
   DateTime now = DateTime.now();
-  _setIsDone(index) async {
-    final patient = box.getAt(index) as Patient;
-    final exercises = patient.exercises;
-    for (var i = 0; i < exercises!.length; i++) {
-      final exercise = exercises[i];
-      if (exercise!.isDone == false) {
-        final exerciseTime = DateTime.parse(exercise.duration);
-        if (now.isAfter(exerciseTime)) {
-          exercise.isDone = true;
-          await exercise.save();
-        }
-      }
-    }
-  }
 
   @override
   void initState() {
@@ -38,203 +24,138 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: ValueListenableBuilder(
-            valueListenable: box.listenable(),
-            builder: (context, box, _) {
-              if (box.isEmpty) {
-                return const Center(
-                  child: Text("Aucun patient actif"),
-                );
-              } else {
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 5.0),
-                      child: SearchBar(
-                        elevation: MaterialStateProperty.all(2.0),
-                        backgroundColor: MaterialStateColor.resolveWith(
-                            (states) =>
-                                const Color.fromARGB(255, 231, 231, 231)),
-                        textStyle: MaterialStateTextStyle.resolveWith(
-                            (states) => const TextStyle(color: Colors.black54)),
-                        controller: _nameController,
-                        onChanged: (value) {
-                          setState(() {
-                            searchText = value;
-                          });
-                        },
-                        leading: const Icon(
-                          Icons.search,
-                          size: 20,
-                          color: Colors.black54,
-                        ),
-                        hintText: "Rechercher un patient active",
-                        hintStyle:
-                            MaterialStateProperty.resolveWith<TextStyle?>(
-                          (states) {
-                            return const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14,
-                            );
-                          },
-                        ),
-                      ),
+    return FutureBuilder(
+      future: Hive.openBox('patients'),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          final patientsBox = Hive.box('patients');
+          final activePatients =
+              patientsBox.values.where((patient) => patient.isActive).toList();
+
+          return ListView.builder(
+            itemCount: activePatients.length,
+            itemBuilder: (context, index) {
+              final patient = activePatients[index] as Patient;
+
+              return Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Card(
+                  elevation: 4,
+                  child: ListTile(
+                    title: Text(patient.name),
+                    subtitle: Text(patient.disease),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => ScheduleDialog(patient: patient),
+                      );
+                    },
+                    trailing: Column(
+                      children: [
+                        const Text("Présent?"),
+                        Switch.adaptive(
+                            activeColor: Colors.green,
+                            value: patient.isActive,
+                            onChanged: (value) => {
+                                  setState(() {
+                                    patient.isActive = value;
+                                  })
+                                }),
+                      ],
                     ),
-                    Expanded(
-                      child: ListView.builder(
-                          itemCount: box.length,
-                          itemBuilder: (context, index) {
-                            final patient = box.getAt(index) as Patient;
-                            if (patient.isActive) {
-                              if (searchText.isEmpty ||
-                                  patient.name
-                                      .toLowerCase()
-                                      .contains(searchText.toLowerCase()) ||
-                                  patient.age.toString().contains(searchText)) {
-                                return Column(
-                                  children: [
-                                    Card(
-                                      surfaceTintColor: Colors.green,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      elevation: 4,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(11.0),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "${patient.name} / ${patient.age} ans",
-                                                  style: const TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    const Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 8.0),
-                                                      child: Text("Présent?",
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400)),
-                                                    ),
-                                                    Switch.adaptive(
-                                                      activeColor: Colors.green,
-                                                      value: patient.isActive,
-                                                      onChanged: (value) {
-                                                        setState(() {
-                                                          patient.isActive =
-                                                              value;
-                                                        });
-                                                      },
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                            const Divider(
-                                              height: 0,
-                                              thickness: 1,
-                                            ),
-                                            ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              itemCount:
-                                                  patient.exercises?.length,
-                                              itemBuilder: (context, index) {
-                                                final exercise =
-                                                    patient.exercises?[index];
-                                                return ListTile(
-                                                  title: Text(
-                                                    exercise?.name ?? '',
-                                                    style: TextStyle(
-                                                      decoration:
-                                                          exercise?.isDone ==
-                                                                  true
-                                                              ? TextDecoration
-                                                                  .lineThrough
-                                                              : null,
-                                                    ),
-                                                  ),
-                                                  subtitle: Text(
-                                                      "Durée : ${exercise?.duration} mins"),
-                                                  trailing: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      IconButton(
-                                                          onPressed:
-                                                              () async => {
-                                                                    await Alarm.set(
-                                                                            alarmSettings: AlarmSettings(
-                                                                                id: index,
-                                                                                dateTime: DateTime(now.year, now.month, now.day, now.hour, now.minute + int.parse(exercise!.duration)),
-                                                                                assetAudioPath: "assets/alarm.mp3",
-                                                                                enableNotificationOnKill: true,
-                                                                                notificationBody: "Exercise terminé",
-                                                                                notificationTitle: "Exercise terminé pour ${patient.name}",
-                                                                                vibrate: true))
-                                                                        .then((value) => {
-                                                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(behavior: SnackBarBehavior.floating, showCloseIcon: true, content: Text("Alarme programmée pour ${patient.name}")))
-                                                                            }),
-                                                                    if (await Alarm
-                                                                        .isRinging(
-                                                                            index))
-                                                                      {
-                                                                        _setIsDone(
-                                                                            index),
-                                                                      }
-                                                                  },
-                                                          icon: const Icon(
-                                                            Icons.alarm,
-                                                            color: Colors.green,
-                                                          )),
-                                                      IconButton(
-                                                          onPressed:
-                                                              () async => {
-                                                                    await Alarm.stop(
-                                                                            index)
-                                                                        .then((value) =>
-                                                                            {
-                                                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(behavior: SnackBarBehavior.floating, showCloseIcon: true, content: Text("Alarme annulée pour ${patient.name}")))
-                                                                            })
-                                                                  },
-                                                          icon: const Icon(
-                                                            Icons.alarm_off,
-                                                            color: Colors.red,
-                                                          )),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }
-                            } else {
-                              return const SizedBox.shrink();
-                            }
-                            return null;
-                          }),
-                    ),
-                  ],
+                  ),
+                ),
+              );
+            },
+          );
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
+    );
+  }
+}
+
+class ScheduleDialog extends StatefulWidget {
+  final Patient patient;
+
+  const ScheduleDialog({super.key, required this.patient});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _ScheduleDialogState createState() => _ScheduleDialogState();
+}
+
+class _ScheduleDialogState extends State<ScheduleDialog> {
+  List<Exercise>? selectedExercises = [];
+  void scheduleExerciseAlarm(String exerciseName, int durationInMinutes) {
+    final now = DateTime.now();
+    final scheduledTime = now.add(Duration(minutes: durationInMinutes));
+
+    Alarm.set(
+      alarmSettings: AlarmSettings(
+          id: exerciseName.hashCode,
+          dateTime: scheduledTime,
+          assetAudioPath: "assets/alarm.mp3",
+          enableNotificationOnKill: true,
+          notificationTitle: "Exercise Reminder",
+          notificationBody: "It's time for $exerciseName!"),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      elevation: 4,
+      title: const Text('Schedule Alarms'),
+      content: Column(
+        children: [
+          Text('Exercises for ${widget.patient.name}:'),
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: widget.patient.exercises?.length ?? 0,
+              itemBuilder: (context, index) {
+                final exercise = widget.patient.exercises?[index];
+                return ListTile(
+                  title: Text(exercise?.name ?? ''),
+                  subtitle:
+                      Text('Duration: ${exercise?.duration ?? ''} minutes'),
+                  onTap: () {
+                    setState(() {
+                      if (selectedExercises!.contains(exercise)) {
+                        selectedExercises!.remove(exercise);
+                      } else {
+                        selectedExercises!.add(exercise!);
+                      }
+                    });
+                  },
+                  selected: selectedExercises!.contains(exercise),
                 );
-              }
-            }));
+              },
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            // Schedule alarms here
+            for (final exercise in selectedExercises!) {
+              scheduleExerciseAlarm(
+                  exercise.name, int.parse(exercise.duration));
+            }
+            Navigator.pop(context); // Close the dialog
+          },
+          child: const Text('Schedule'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context); // Close the dialog
+          },
+          child: const Text('Cancel'),
+        ),
+      ],
+    );
   }
 }

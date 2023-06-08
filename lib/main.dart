@@ -5,6 +5,7 @@ import 'package:alarm/alarm.dart';
 import 'package:MyPatient/screens/splash_screen.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(PatientAdapter());
   Hive.registerAdapter(ExerciseAdapter());

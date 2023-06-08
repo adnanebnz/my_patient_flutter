@@ -29,7 +29,7 @@ class _CancelScheduleWidgetState extends State<CancelScheduleWidget> {
       elevation: 4,
       title: const Text('Annuler les alarmes'),
       content: SizedBox(
-        height: 270,
+        height: size.height * 0.4,
         width: size.width * 0.7,
         child: Column(
           children: [

@@ -34,7 +34,7 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
           dateTime: scheduledTime,
           assetAudioPath: "assets/alarm.mp3",
           enableNotificationOnKill: true,
-          notificationTitle: "Rappel d'exercice",
+          notificationTitle: "Rappel d'exercice pour ${widget.patient.name}",
           notificationBody: "Exercice $exerciseName terminée!"),
     );
   }
@@ -51,7 +51,7 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
       elevation: 4,
       title: const Text('Planifier des alarmes'),
       content: SizedBox(
-        height: 270,
+        height: size.height * 0.4,
         width: size.width * 0.7,
         child: Column(
           children: [

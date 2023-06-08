@@ -56,6 +56,11 @@ class _UpdateExerciceFormState extends State<UpdateExerciceForm> {
         children: [
           const Text('Nom de l\'exercice'),
           TextFormField(
+            decoration: const InputDecoration(
+              hintText: 'Flexion du coude',
+              hintStyle: TextStyle(fontSize: 13.0),
+              prefixIcon: Icon(Icons.sports_gymnastics_outlined),
+            ),
             controller: _nameController,
             validator: _fieldValidator,
           ),
@@ -64,6 +69,13 @@ class _UpdateExerciceFormState extends State<UpdateExerciceForm> {
           ),
           const Text('Durée de l\'exercice'),
           TextFormField(
+            decoration: const InputDecoration(
+              hintText: '5 minutes',
+              hintStyle: TextStyle(
+                fontSize: 13.0,
+              ),
+              prefixIcon: Icon(Icons.timer_outlined),
+            ),
             keyboardType: TextInputType.number,
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.digitsOnly

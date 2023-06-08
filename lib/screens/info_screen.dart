@@ -61,6 +61,7 @@ class _InfoPageState extends State<InfoPage> {
             ),
           ),
           body: TabBarView(
+            physics:const NeverScrollableScrollPhysics(),
             children: [
               MaterialApp(
                   debugShowCheckedModeBanner: false,

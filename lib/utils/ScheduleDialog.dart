@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, no_leading_underscores_for_local_identifiers
 
 import 'package:MyPatient/models/patient.dart';
 import 'package:alarm/alarm.dart';
@@ -70,7 +70,9 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
           content: TextField(
             controller: _durationController,
             keyboardType: TextInputType.number,
-            decoration: const InputDecoration(hintText: 'Durée en minutes'),
+            decoration: const InputDecoration(
+                hintText: 'Durée en minutes',
+                prefixIcon: Icon(Icons.timer_outlined)),
           ),
           actions: [
             TextButton(
@@ -118,49 +120,61 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
                   final isExerciseSelected =
                       selectedExercisesArray!.contains(exercise);
                   final isExerciseProgrammed = exercise?.isProgrammed ?? false;
+                  final isExerciseCompleted = exercise?.isDone ?? false;
 
                   return Padding(
-                    padding: const EdgeInsets.only(top: 12.0),
-                    child: ListTile(
-                      title: Text(
-                        exercise?.name ?? '',
-                        style: TextStyle(
-                          decoration: isExerciseProgrammed
-                              ? TextDecoration.lineThrough
-                              : null,
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: ListTile(
+                        title: Text(
+                          exercise?.name ?? '',
+                          style: TextStyle(
+                            color: isExerciseProgrammed
+                                ? Colors.green
+                                : Colors.black,
+                            decoration: isExerciseCompleted
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                          ),
                         ),
-                      ),
-                      subtitle: Text(
-                        'Duration: ${exercise?.duration ?? ''} minutes',
-                      ),
-                      onTap: () async {
-                        final enteredDuration =
-                            await editPatientExerciseDurationDialog(
-                          widget.patient,
-                          exercise!,
-                        );
+                        subtitle: Text(
+                          'Duration: ${exercise?.duration ?? ''} minutes',
+                        ),
+                        onTap: () async {
+                          final enteredDuration =
+                              await editPatientExerciseDurationDialog(
+                            widget.patient,
+                            exercise!,
+                          );
 
-                        if (enteredDuration != null) {
-                          setState(() {
-                            exercise.duration = enteredDuration;
-                          });
-                          setState(() {
-                            if (isExerciseSelected) {
-                              selectedExercisesArray!.remove(exercise);
-                            } else {
-                              selectedExercisesArray!.add(exercise!);
-                            }
-                          });
-                        }
-                      },
-                      selected: isExerciseSelected,
-                      selectedTileColor: Colors.grey[100],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      selectedColor: Colors.green,
-                    ),
-                  );
+                          if (enteredDuration != null) {
+                            setState(() {
+                              exercise.duration = enteredDuration;
+                            });
+                            setState(() {
+                              if (isExerciseSelected) {
+                                selectedExercisesArray!.remove(exercise);
+                              } else {
+                                selectedExercisesArray!.add(exercise);
+                              }
+                            });
+                          }
+                        },
+                        selected: isExerciseSelected,
+                        selectedTileColor: Colors.grey[100],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        selectedColor: Colors.green,
+                        trailing: isExerciseProgrammed
+                            ? const Icon(
+                                Icons.alarm_on,
+                                color: Colors.green,
+                              )
+                            : const Icon(
+                                Icons.alarm_add,
+                                color: Colors.green,
+                              ),
+                      ));
                 },
               ),
             ),

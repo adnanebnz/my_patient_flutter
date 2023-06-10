@@ -45,8 +45,7 @@ class _HomePageState extends State<HomePage> {
             title: const Text('Acceuil'),
             bottom: const TabBar(
               indicatorSize: TabBarIndicatorSize.label,
-              labelStyle:
-                  TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500),
+              labelStyle: TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
               tabs: [
                 Tab(
                   icon: Icon(Icons.list),

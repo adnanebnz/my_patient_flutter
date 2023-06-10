@@ -1,32 +1,32 @@
-// ignore_for_file: avoid_print
-
+import 'package:MyPatient/screens/update_patient_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:hive_flutter/adapters.dart';
-import 'package:MyPatient/models/patient.dart';
-import 'package:MyPatient/screens/active_patients_screen.dart';
-import 'package:MyPatient/screens/add_exercice_screen.dart';
-import 'package:MyPatient/screens/add_patient_screen.dart';
-import 'package:MyPatient/screens/exercices_list_screen.dart';
-import 'package:MyPatient/screens/update_patient_screen.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'dart:developer' as devtools show log;
 
-class InfoPage extends StatefulWidget {
-  const InfoPage({super.key});
+import '../models/patient.dart';
+import 'active_patients_screen.dart';
+import 'add_exercice_screen.dart';
+import 'add_patient_screen.dart';
+import 'exercices_list_screen.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<InfoPage> createState() => _InfoPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _InfoPageState extends State<InfoPage> {
+class _HomePageState extends State<HomePage> {
   late final Box patientsBox;
   late final Box exerciseBox;
   bool value = false;
   String searchText = '';
   final _nameController = TextEditingController();
 
-  _deleteInfo(int index) async {
+  _deletePatient(int index) async {
     await patientsBox.deleteAt(index);
-    print('Deleted successfully');
+    devtools.log('Deleted Patient');
   }
 
   @override
@@ -44,6 +44,9 @@ class _InfoPageState extends State<InfoPage> {
           appBar: AppBar(
             title: const Text('Acceuil'),
             bottom: const TabBar(
+              indicatorSize: TabBarIndicatorSize.label,
+              labelStyle:
+                  TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500),
               tabs: [
                 Tab(
                   icon: Icon(Icons.list),
@@ -51,17 +54,17 @@ class _InfoPageState extends State<InfoPage> {
                 ),
                 Tab(
                   icon: Icon(Icons.checklist_rtl),
-                  text: 'Patients active',
+                  text: 'Patients présents',
                 ),
                 Tab(
                   icon: Icon(Icons.sports_gymnastics),
-                  text: 'exercises',
+                  text: 'Exercises',
                 )
               ],
             ),
           ),
           body: TabBarView(
-            physics:const NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             children: [
               MaterialApp(
                   debugShowCheckedModeBanner: false,
@@ -172,7 +175,7 @@ class _InfoPageState extends State<InfoPage> {
                                                                       TextButton(
                                                                           onPressed: () =>
                                                                               {
-                                                                                _deleteInfo(index),
+                                                                                _deletePatient(index),
                                                                                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                                                                                   showCloseIcon: true,
                                                                                   behavior: SnackBarBehavior.floating,
@@ -231,6 +234,10 @@ class _InfoPageState extends State<InfoPage> {
                                                         ),
                                                         key: UniqueKey(),
                                                         child: Card(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  bottom: 10),
                                                           surfaceTintColor:
                                                               Colors.green,
                                                           shape: RoundedRectangleBorder(

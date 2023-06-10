@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import '../models/patient.dart';
+import 'dart:developer' as devtools show log;
 
 class AddExerciceForm extends StatefulWidget {
   const AddExerciceForm({super.key});
@@ -12,7 +12,7 @@ class AddExerciceForm extends StatefulWidget {
 
 class _AddExerciceFormState extends State<AddExerciceForm> {
   final _nameController = TextEditingController();
-  final _durationController = TextEditingController();
+  final _descriptionController = TextEditingController();
   final _exerciceFormKey = GlobalKey<FormState>();
   late final Box exerciceBox;
 
@@ -26,11 +26,11 @@ class _AddExerciceFormState extends State<AddExerciceForm> {
   _addExo() async {
     Exercise newExercice = Exercise(
       name: _nameController.text,
-      duration: _durationController.text,
+      description: _descriptionController.text,
+      duration: '',
     );
     exerciceBox.add(newExercice);
-    // ignore: avoid_print
-    print('Added successfully');
+    devtools.log('Added successfully');
   }
 
   @override
@@ -49,8 +49,6 @@ class _AddExerciceFormState extends State<AddExerciceForm> {
           const Text('Nom de l\'exercice'),
           TextFormField(
             decoration: const InputDecoration(
-              hintText: 'Flexion du coude',
-              hintStyle: TextStyle(fontSize: 13.0),
               prefixIcon: Icon(Icons.sports_gymnastics_outlined),
             ),
             controller: _nameController,
@@ -59,20 +57,12 @@ class _AddExerciceFormState extends State<AddExerciceForm> {
           const SizedBox(
             height: 24.0,
           ),
-          const Text('Durée de l\'exercice'),
+          const Text('Description de l\'exercice'),
           TextFormField(
             decoration: const InputDecoration(
-              hintText: '5 minutes',
-              hintStyle: TextStyle(
-                fontSize: 13.0,
-              ),
-              prefixIcon: Icon(Icons.timer_outlined),
+              prefixIcon: Icon(Icons.description_outlined),
             ),
-            keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly
-            ],
-            controller: _durationController,
+            controller: _descriptionController,
             validator: _fieldValidator,
           ),
           const Spacer(),

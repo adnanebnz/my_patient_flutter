@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import '../models/patient.dart';
+import 'dart:developer' as devtools show log;
 
 class UpdateExerciceForm extends StatefulWidget {
   const UpdateExerciceForm(
@@ -17,7 +17,7 @@ class _UpdateExerciceFormState extends State<UpdateExerciceForm> {
   // ignore: prefer_typing_uninitialized_variables
   late final _nameController;
   // ignore: prefer_typing_uninitialized_variables
-  late final _durationController;
+  late final _descriptionController;
   final _exerciceFormKey = GlobalKey<FormState>();
   late final Box exerciceBox;
 
@@ -31,11 +31,11 @@ class _UpdateExerciceFormState extends State<UpdateExerciceForm> {
   _updateExo() async {
     Exercise newExercice = Exercise(
       name: _nameController.text,
-      duration: _durationController.text,
+      duration: _descriptionController.text,
     );
     exerciceBox.putAt(widget.index, newExercice);
-    // ignore: avoid_print
-    print('Updated successfully');
+
+    devtools.log('Updated successfully');
   }
 
   @override
@@ -43,8 +43,8 @@ class _UpdateExerciceFormState extends State<UpdateExerciceForm> {
     super.initState();
     exerciceBox = Hive.box('exercises');
     _nameController = TextEditingController(text: widget.exercise.name);
-    _durationController =
-        TextEditingController(text: widget.exercise.duration.toString());
+    _descriptionController =
+        TextEditingController(text: widget.exercise.duration);
   }
 
   @override
@@ -57,8 +57,6 @@ class _UpdateExerciceFormState extends State<UpdateExerciceForm> {
           const Text('Nom de l\'exercice'),
           TextFormField(
             decoration: const InputDecoration(
-              hintText: 'Flexion du coude',
-              hintStyle: TextStyle(fontSize: 13.0),
               prefixIcon: Icon(Icons.sports_gymnastics_outlined),
             ),
             controller: _nameController,
@@ -67,20 +65,12 @@ class _UpdateExerciceFormState extends State<UpdateExerciceForm> {
           const SizedBox(
             height: 24.0,
           ),
-          const Text('Durée de l\'exercice'),
+          const Text('Description de l\'exercice'),
           TextFormField(
             decoration: const InputDecoration(
-              hintText: '5 minutes',
-              hintStyle: TextStyle(
-                fontSize: 13.0,
-              ),
-              prefixIcon: Icon(Icons.timer_outlined),
+              prefixIcon: Icon(Icons.description_outlined),
             ),
-            keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly
-            ],
-            controller: _durationController,
+            controller: _descriptionController,
             validator: _fieldValidator,
           ),
           const SizedBox(

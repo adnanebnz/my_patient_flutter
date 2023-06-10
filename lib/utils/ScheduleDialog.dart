@@ -16,12 +16,31 @@ class ScheduleDialog extends StatefulWidget {
 
 class _ScheduleDialogState extends State<ScheduleDialog> {
   List<Exercise>? selectedExercisesArray = [];
-  _addSelectedExercisesToPatient(exercice) {
+  final _durationController = TextEditingController();
+  void _addSelectedExercisesToPatient(Exercise exercise) {
     setState(() {
-      widget.patient.selectedExercises?.add(exercice);
+      final isExerciseSelected = selectedExercisesArray!.contains(exercise);
+      if (isExerciseSelected) {
+        exercise.isProgrammed = true;
+      } else {
+        exercise.isProgrammed = false;
+      }
 
+      widget.patient.selectedExercises?.add(exercise);
       widget.patient.save();
     });
+  }
+
+  Future<void> setPatientExerciseDuration(
+      Exercise exerciseName, String duration) async {
+    // Convert the duration to an integer
+    final durationInMinutes = int.parse(duration);
+    // Schedule the alarm
+    scheduleExerciseAlarm(exerciseName.name, durationInMinutes);
+    // Add the exercise to the patient
+    _addSelectedExercisesToPatient(exerciseName);
+    // Clear the text controller
+    _durationController.clear();
   }
 
   void scheduleExerciseAlarm(String exerciseName, int durationInMinutes) {
@@ -36,6 +55,40 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
           enableNotificationOnKill: true,
           notificationTitle: "Rappel d'exercice pour ${widget.patient.name}",
           notificationBody: "Exercice $exerciseName terminée!"),
+    );
+  }
+
+  Future<String?> editPatientExerciseDurationDialog(
+      Patient patient, Exercise exercise) async {
+    return showDialog<String>(
+      context: context,
+      builder: (context) {
+        final _durationController = TextEditingController();
+
+        return AlertDialog(
+          title: const Text('Modifier la durée'),
+          content: TextField(
+            controller: _durationController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(hintText: 'Durée en minutes'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                final duration = _durationController.text;
+                Navigator.of(context).pop(duration);
+              },
+              child: const Text('Enregistrer'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Annuler'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -62,25 +115,49 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
                 itemCount: widget.patient.exercises?.length ?? 0,
                 itemBuilder: (context, index) {
                   final exercise = widget.patient.exercises?[index];
+                  final isExerciseSelected =
+                      selectedExercisesArray!.contains(exercise);
+                  final isExerciseProgrammed = exercise?.isProgrammed ?? false;
+
                   return Padding(
                     padding: const EdgeInsets.only(top: 12.0),
                     child: ListTile(
-                      title: Text(exercise?.name ?? ''),
-                      subtitle:
-                          Text('Duration: ${exercise?.duration ?? ''} minutes'),
-                      onTap: () {
-                        setState(() {
-                          if (selectedExercisesArray!.contains(exercise)) {
-                            selectedExercisesArray!.remove(exercise);
-                          } else {
-                            selectedExercisesArray!.add(exercise!);
-                          }
-                        });
+                      title: Text(
+                        exercise?.name ?? '',
+                        style: TextStyle(
+                          decoration: isExerciseProgrammed
+                              ? TextDecoration.lineThrough
+                              : null,
+                        ),
+                      ),
+                      subtitle: Text(
+                        'Duration: ${exercise?.duration ?? ''} minutes',
+                      ),
+                      onTap: () async {
+                        final enteredDuration =
+                            await editPatientExerciseDurationDialog(
+                          widget.patient,
+                          exercise!,
+                        );
+
+                        if (enteredDuration != null) {
+                          setState(() {
+                            exercise.duration = enteredDuration;
+                          });
+                          setState(() {
+                            if (isExerciseSelected) {
+                              selectedExercisesArray!.remove(exercise);
+                            } else {
+                              selectedExercisesArray!.add(exercise!);
+                            }
+                          });
+                        }
                       },
-                      selected: selectedExercisesArray!.contains(exercise),
+                      selected: isExerciseSelected,
                       selectedTileColor: Colors.grey[100],
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       selectedColor: Colors.green,
                     ),
                   );
@@ -97,10 +174,16 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
             for (final exercise in selectedExercisesArray!) {
               // add selected exercises to patient
               _addSelectedExercisesToPatient(exercise);
-              // schedule alarm
 
+              // schedule alarm
               scheduleExerciseAlarm(
-                  exercise.name, int.parse(exercise.duration));
+                exercise.name,
+                int.parse(exercise.duration),
+              );
+
+              // update isProgrammed property
+              exercise.isProgrammed = true;
+              exercise.save();
             }
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(

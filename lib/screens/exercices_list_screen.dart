@@ -156,7 +156,7 @@ class _exercisesListPageState extends State<exercisesListPage> {
                                       ListTile(
                                         title: Text(exercice.name),
                                         subtitle: Text(
-                                            "Duration de : ${exercice.duration} minutes"),
+                                            "Description : ${exercice.description}"),
                                       ),
                                     ],
                                   ),

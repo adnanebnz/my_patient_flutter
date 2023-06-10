@@ -13,14 +13,15 @@ class ActivePatientsPage extends StatefulWidget {
 }
 
 class _ActivePatientsPageState extends State<ActivePatientsPage> {
-  late final Box box;
+  late final Box patientBox;
+
   String searchText = '';
   DateTime now = DateTime.now();
 
   @override
   void initState() {
     super.initState();
-    box = Hive.box('patients');
+    patientBox = Hive.box('patients');
   }
 
   @override
@@ -84,6 +85,15 @@ class _ActivePatientsPageState extends State<ActivePatientsPage> {
                                         patient.isActive = value;
                                       })
                                     }),
+                          ),
+                          const Divider(
+                            height: 20,
+                            thickness: 1,
+                          ),
+                          Text(
+                            "Maladie: ${patient.disease}",
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.black87),
                           )
                         ]),
                       )));

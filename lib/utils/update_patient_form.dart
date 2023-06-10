@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import '../models/patient.dart';
+import 'dart:developer' as devtools show log;
 
 class UpdatePersonForm extends StatefulWidget {
   const UpdatePersonForm(
@@ -42,8 +43,8 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
       exercises: selectedExercises,
     );
     await box.putAt(widget.index, newPerson);
-    // ignore: avoid_print
-    print('Updated successfully');
+
+    devtools.log("Updated successfully");
   }
 
   @override
@@ -67,8 +68,6 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
           const Text('Nom et prénom'),
           TextFormField(
             decoration: const InputDecoration(
-              hintText: 'Abderrahmane Boussaid',
-              hintStyle: TextStyle(fontSize: 13.0),
               prefixIcon: Icon(Icons.person_2_outlined),
             ),
             controller: _nameController,
@@ -80,8 +79,6 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
           const Text('Age'),
           TextFormField(
             decoration: const InputDecoration(
-              hintText: '35 ans',
-              hintStyle: TextStyle(fontSize: 13.0),
               prefixIcon: Icon(Icons.person_2_outlined),
             ),
             keyboardType: TextInputType.number,
@@ -97,8 +94,6 @@ class _AddPersonFormState extends State<UpdatePersonForm> {
           const Text('Maladie'),
           TextFormField(
             decoration: const InputDecoration(
-              hintText: 'Bras fracturé',
-              hintStyle: TextStyle(fontSize: 13.0),
               prefixIcon: Icon(Icons.sick_outlined),
             ),
             controller: _diseaseController,

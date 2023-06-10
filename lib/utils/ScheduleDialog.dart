@@ -3,6 +3,7 @@
 import 'package:MyPatient/models/patient.dart';
 import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer' as developer show log;
 
 class ScheduleDialog extends StatefulWidget {
   final Patient patient;
@@ -32,15 +33,19 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
   }
 
   Future<void> setPatientExerciseDuration(
-      Exercise exerciseName, String duration) async {
+      Exercise exercise, String duration) async {
     // Convert the duration to an integer
     final durationInMinutes = int.parse(duration);
     // Schedule the alarm
-    scheduleExerciseAlarm(exerciseName.name, durationInMinutes);
+    scheduleExerciseAlarm(exercise.name, durationInMinutes);
     // Add the exercise to the patient
-    _addSelectedExercisesToPatient(exerciseName);
+    _addSelectedExercisesToPatient(exercise);
     // Clear the text controller
     _durationController.clear();
+    // update isDone property to true
+    exercise.isDone = true;
+    // Save the exercise
+    exercise.save();
   }
 
   void scheduleExerciseAlarm(String exerciseName, int durationInMinutes) {

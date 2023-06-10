@@ -16,10 +16,16 @@ class ScheduleDialog extends StatefulWidget {
 
 class _ScheduleDialogState extends State<ScheduleDialog> {
   List<Exercise>? selectedExercisesArray = [];
-  _addSelectedExercisesToPatient(exercice) {
+  void _addSelectedExercisesToPatient(Exercise exercise) {
     setState(() {
-      widget.patient.selectedExercises?.add(exercice);
+      final isExerciseSelected = selectedExercisesArray!.contains(exercise);
+      if (isExerciseSelected) {
+        exercise.isProgrammed = true;
+      } else {
+        exercise.isProgrammed = false;
+      }
 
+      widget.patient.selectedExercises?.add(exercise);
       widget.patient.save();
     });
   }
@@ -62,25 +68,38 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
                 itemCount: widget.patient.exercises?.length ?? 0,
                 itemBuilder: (context, index) {
                   final exercise = widget.patient.exercises?[index];
+                  final isExerciseSelected =
+                      selectedExercisesArray!.contains(exercise);
+                  final isExerciseProgrammed = exercise?.isProgrammed ?? false;
+
                   return Padding(
                     padding: const EdgeInsets.only(top: 12.0),
                     child: ListTile(
-                      title: Text(exercise?.name ?? ''),
-                      subtitle:
-                          Text('Duration: ${exercise?.duration ?? ''} minutes'),
+                      title: Text(
+                        exercise?.name ?? '',
+                        style: TextStyle(
+                          decoration: isExerciseProgrammed
+                              ? TextDecoration.lineThrough
+                              : null,
+                        ),
+                      ),
+                      subtitle: Text(
+                        'Duration: ${exercise?.duration ?? ''} minutes',
+                      ),
                       onTap: () {
                         setState(() {
-                          if (selectedExercisesArray!.contains(exercise)) {
+                          if (isExerciseSelected) {
                             selectedExercisesArray!.remove(exercise);
                           } else {
                             selectedExercisesArray!.add(exercise!);
                           }
                         });
                       },
-                      selected: selectedExercisesArray!.contains(exercise),
+                      selected: isExerciseSelected,
                       selectedTileColor: Colors.grey[100],
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       selectedColor: Colors.green,
                     ),
                   );
@@ -97,10 +116,16 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
             for (final exercise in selectedExercisesArray!) {
               // add selected exercises to patient
               _addSelectedExercisesToPatient(exercise);
-              // schedule alarm
 
+              // schedule alarm
               scheduleExerciseAlarm(
-                  exercise.name, int.parse(exercise.duration));
+                exercise.name,
+                int.parse(exercise.duration),
+              );
+
+              // update isProgrammed property
+              exercise.isProgrammed = true;
+              exercise.save();
             }
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(

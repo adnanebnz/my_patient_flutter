@@ -16,6 +16,7 @@ class ScheduleDialog extends StatefulWidget {
 
 class _ScheduleDialogState extends State<ScheduleDialog> {
   List<Exercise>? selectedExercisesArray = [];
+  final _durationController = TextEditingController();
   void _addSelectedExercisesToPatient(Exercise exercise) {
     setState(() {
       final isExerciseSelected = selectedExercisesArray!.contains(exercise);
@@ -30,6 +31,18 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
     });
   }
 
+  Future<void> setPatientExerciseDuration(
+      Exercise exerciseName, String duration) async {
+    // Convert the duration to an integer
+    final durationInMinutes = int.parse(duration);
+    // Schedule the alarm
+    scheduleExerciseAlarm(exerciseName.name, durationInMinutes);
+    // Add the exercise to the patient
+    _addSelectedExercisesToPatient(exerciseName);
+    // Clear the text controller
+    _durationController.clear();
+  }
+
   void scheduleExerciseAlarm(String exerciseName, int durationInMinutes) {
     final now = DateTime.now();
     final scheduledTime = now.add(Duration(minutes: durationInMinutes));
@@ -42,6 +55,40 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
           enableNotificationOnKill: true,
           notificationTitle: "Rappel d'exercice pour ${widget.patient.name}",
           notificationBody: "Exercice $exerciseName terminée!"),
+    );
+  }
+
+  Future<String?> editPatientExerciseDurationDialog(
+      Patient patient, Exercise exercise) async {
+    return showDialog<String>(
+      context: context,
+      builder: (context) {
+        final _durationController = TextEditingController();
+
+        return AlertDialog(
+          title: const Text('Modifier la durée'),
+          content: TextField(
+            controller: _durationController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(hintText: 'Durée en minutes'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                final duration = _durationController.text;
+                Navigator.of(context).pop(duration);
+              },
+              child: const Text('Enregistrer'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Annuler'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -86,14 +133,25 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
                       subtitle: Text(
                         'Duration: ${exercise?.duration ?? ''} minutes',
                       ),
-                      onTap: () {
-                        setState(() {
-                          if (isExerciseSelected) {
-                            selectedExercisesArray!.remove(exercise);
-                          } else {
-                            selectedExercisesArray!.add(exercise!);
-                          }
-                        });
+                      onTap: () async {
+                        final enteredDuration =
+                            await editPatientExerciseDurationDialog(
+                          widget.patient,
+                          exercise!,
+                        );
+
+                        if (enteredDuration != null) {
+                          setState(() {
+                            exercise.duration = enteredDuration;
+                          });
+                          setState(() {
+                            if (isExerciseSelected) {
+                              selectedExercisesArray!.remove(exercise);
+                            } else {
+                              selectedExercisesArray!.add(exercise!);
+                            }
+                          });
+                        }
                       },
                       selected: isExerciseSelected,
                       selectedTileColor: Colors.grey[100],

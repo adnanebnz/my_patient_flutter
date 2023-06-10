@@ -35,6 +35,12 @@ class Exercise extends HiveObject {
   String duration;
   @HiveField(2)
   bool? isDone = false;
+  @HiveField(3)
+  String? description;
 
-  Exercise({required this.name, required this.duration, this.isDone});
+  Exercise(
+      {required this.name,
+      required this.duration,
+      this.isDone,
+      this.description});
 }

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:MyPatient/screens/info_screen.dart';
+import 'package:MyPatient/screens/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:MyPatient/screens/intro_screen.dart';
 
@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Future.delayed(
           const Duration(seconds: 2),
           () => Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const InfoPage()),
+            MaterialPageRoute(builder: (context) => const HomePage()),
           ),
         );
       } else {

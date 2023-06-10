@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:MyPatient/screens/info_screen.dart';
+import 'package:MyPatient/screens/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroScreen extends StatefulWidget {
@@ -91,7 +91,7 @@ class _IntroScreen extends State<IntroScreen> {
   void goHomePage(context) {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) {
-      return const InfoPage();
+      return const HomePage();
     }), (Route<dynamic> route) => false);
   }
 }
@@ -102,6 +102,7 @@ Widget intoImage(String assetName) {
     child: Image.asset(
       assetName,
       width: 300,
+      height: 300,
     ),
   );
 }

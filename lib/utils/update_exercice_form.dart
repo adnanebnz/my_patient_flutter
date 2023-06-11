@@ -31,7 +31,10 @@ class _UpdateExerciceFormState extends State<UpdateExerciceForm> {
   _updateExo() async {
     Exercise newExercice = Exercise(
       name: _nameController.text,
-      duration: _descriptionController.text,
+      description: _descriptionController.text,
+      duration: '',
+      isDone: false,
+      isProgrammed: false,
     );
     exerciceBox.putAt(widget.index, newExercice);
 
@@ -44,7 +47,7 @@ class _UpdateExerciceFormState extends State<UpdateExerciceForm> {
     exerciceBox = Hive.box('exercises');
     _nameController = TextEditingController(text: widget.exercise.name);
     _descriptionController =
-        TextEditingController(text: widget.exercise.duration);
+        TextEditingController(text: widget.exercise.description);
   }
 
   @override

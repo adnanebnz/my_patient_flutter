@@ -19,6 +19,7 @@ class PatientAdapter extends TypeAdapter<Patient> {
     return Patient(
       name: fields[0] as String,
       exercises: (fields[4] as List?)?.cast<Exercise?>(),
+      selectedExercises: (fields[5] as List?)?.cast<Exercise?>(),
       age: fields[1] as String,
       isActive: fields[3] as bool,
       disease: fields[2] as String,
@@ -28,7 +29,7 @@ class PatientAdapter extends TypeAdapter<Patient> {
   @override
   void write(BinaryWriter writer, Patient obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class PatientAdapter extends TypeAdapter<Patient> {
       ..writeByte(3)
       ..write(obj.isActive)
       ..writeByte(4)
-      ..write(obj.exercises);
+      ..write(obj.exercises)
+      ..writeByte(5)
+      ..write(obj.selectedExercises);
   }
 
   @override
@@ -66,19 +69,25 @@ class ExerciseAdapter extends TypeAdapter<Exercise> {
       name: fields[0] as String,
       duration: fields[1] as String,
       isDone: fields[2] as bool?,
+      description: fields[3] as String?,
+      isProgrammed: fields[4] as bool?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Exercise obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
       ..write(obj.duration)
       ..writeByte(2)
-      ..write(obj.isDone);
+      ..write(obj.isDone)
+      ..writeByte(3)
+      ..write(obj.description)
+      ..writeByte(4)
+      ..write(obj.isProgrammed);
   }
 
   @override

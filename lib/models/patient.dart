@@ -43,7 +43,7 @@ class Exercise extends HiveObject {
   Exercise(
       {required this.name,
       required this.duration,
-      this.isDone,
-      this.description,
-      this.isProgrammed});
+      required this.isDone,
+      required this.description,
+      required this.isProgrammed});
 }

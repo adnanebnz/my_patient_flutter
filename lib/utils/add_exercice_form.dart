@@ -27,6 +27,8 @@ class _AddExerciceFormState extends State<AddExerciceForm> {
     Exercise newExercice = Exercise(
       name: _nameController.text,
       description: _descriptionController.text,
+      isDone: false,
+      isProgrammed: false,
       duration: '',
     );
     exerciceBox.add(newExercice);

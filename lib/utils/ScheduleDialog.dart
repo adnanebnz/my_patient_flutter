@@ -2,7 +2,6 @@
 import 'package:MyPatient/models/patient.dart';
 import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer' as developer show log;
 
 class ScheduleDialog extends StatefulWidget {
   final Patient patient;

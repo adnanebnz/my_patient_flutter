@@ -1,5 +1,4 @@
-// ignore_for_file: file_names, no_leading_underscores_for_local_identifiers
-
+// ignore: file_names
 import 'package:MyPatient/models/patient.dart';
 import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +16,7 @@ class ScheduleDialog extends StatefulWidget {
 
 class _ScheduleDialogState extends State<ScheduleDialog> {
   List<Exercise>? selectedExercisesArray = [];
+  // ignore: unused_field
   final _durationController = TextEditingController();
   void _addSelectedExercisesToPatient(Exercise exercise) {
     setState(() {
@@ -30,22 +30,6 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
       widget.patient.selectedExercises?.add(exercise);
       widget.patient.save();
     });
-  }
-
-  Future<void> setPatientExerciseDuration(
-      Exercise exercise, String duration) async {
-    // Convert the duration to an integer
-    final durationInMinutes = int.parse(duration);
-    // Schedule the alarm
-    scheduleExerciseAlarm(exercise.name, durationInMinutes);
-    // Add the exercise to the patient
-    _addSelectedExercisesToPatient(exercise);
-    // Clear the text controller
-    _durationController.clear();
-    // update isDone property to true
-    exercise.isDone = true;
-    // Save the exercise
-    exercise.save();
   }
 
   void scheduleExerciseAlarm(String exerciseName, int durationInMinutes) {
@@ -68,6 +52,7 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
     return showDialog<String>(
       context: context,
       builder: (context) {
+        // ignore: no_leading_underscores_for_local_identifiers
         final _durationController = TextEditingController();
 
         return AlertDialog(
@@ -142,7 +127,9 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
                           ),
                         ),
                         subtitle: Text(
-                          'Duration: ${exercise?.duration ?? ''} minutes',
+                          isExerciseProgrammed
+                              ? 'Duration: ${exercise?.duration ?? ''} minutes'
+                              : 'Non Programmée',
                         ),
                         onTap: () async {
                           final enteredDuration =
@@ -177,7 +164,7 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
                               )
                             : const Icon(
                                 Icons.alarm_add,
-                                color: Colors.green,
+                                color: Colors.blue,
                               ),
                       ));
                 },
@@ -202,6 +189,7 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
 
               // update isProgrammed property
               exercise.isProgrammed = true;
+              exercise.isDone = false;
               exercise.save();
             }
             ScaffoldMessenger.of(context).showSnackBar(

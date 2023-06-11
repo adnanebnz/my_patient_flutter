@@ -4,6 +4,7 @@
 import 'package:MyPatient/models/patient.dart';
 import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer' as developer show log;
 
 class CancelScheduleWidget extends StatefulWidget {
   const CancelScheduleWidget({super.key, required this.patient});
@@ -16,8 +17,17 @@ class CancelScheduleWidget extends StatefulWidget {
 class _CancelScheduleWidgetState extends State<CancelScheduleWidget> {
   List<Exercise>? selectedExercises = [];
 
-  void cancelScheduleExerciseAlarm(String exerciseName) {
-    Alarm.stop(exerciseName.hashCode);
+  void _removeSelectedExercisesToPatient(Exercise exercise) {
+    setState(() {
+      final exercises = selectedExercises;
+      Alarm.stop(exercise.name.hashCode);
+      exercise.isProgrammed = false;
+      exercise.isDone = false;
+      exercise.save();
+      developer.log(
+          "${exercise.name} ${exercise.description} ${exercise.isDone} ${exercise.isProgrammed} ${exercise.duration}");
+      exercises?.remove(exercise);
+    });
   }
 
   @override
@@ -73,7 +83,9 @@ class _CancelScheduleWidgetState extends State<CancelScheduleWidget> {
           onPressed: () {
             // Cancel alarms here
             for (final exercise in selectedExercises!) {
-              cancelScheduleExerciseAlarm(exercise.name);
+              _removeSelectedExercisesToPatient(exercise);
+              //reset
+              Navigator.of(context).pop();
             }
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(

@@ -2,10 +2,10 @@
 import 'package:MyPatient/models/patient.dart';
 import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class ScheduleDialog extends StatefulWidget {
   final Patient patient;
-
   const ScheduleDialog({super.key, required this.patient});
 
   @override
@@ -22,7 +22,10 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
       final isExerciseSelected = selectedExercisesArray!.contains(exercise);
       if (isExerciseSelected) {
         exercise.isProgrammed = true;
+        exercise.description = exercise.description;
       } else {
+        exercise.description = exercise.description;
+
         exercise.isProgrammed = false;
       }
 
@@ -128,7 +131,7 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
                         subtitle: Text(
                           isExerciseProgrammed
                               ? 'Duration: ${exercise?.duration ?? ''} minutes'
-                              : 'Non Programmée',
+                              : '',
                         ),
                         onTap: () async {
                           final enteredDuration =
@@ -140,6 +143,7 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
                           if (enteredDuration != null) {
                             setState(() {
                               exercise.duration = enteredDuration;
+                              exercise.description = exercise.description;
                             });
                             setState(() {
                               if (isExerciseSelected) {
@@ -179,6 +183,7 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
             for (final exercise in selectedExercisesArray!) {
               // add selected exercises to patient
               _addSelectedExercisesToPatient(exercise);
+              exercise.description = exercise.description;
 
               // schedule alarm
               scheduleExerciseAlarm(
@@ -189,6 +194,8 @@ class _ScheduleDialogState extends State<ScheduleDialog> {
               // update isProgrammed property
               exercise.isProgrammed = true;
               exercise.isDone = false;
+              exercise.description = exercise.description;
+
               exercise.save();
             }
             ScaffoldMessenger.of(context).showSnackBar(

@@ -30,7 +30,6 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     checkFirstSeen().then((bool isFirstTime) {
       if (isFirstTime) {
-        // Not the first time, navigate directly to the InfoPage
         Future.delayed(
           const Duration(seconds: 2),
           () => Navigator.of(context).pushReplacement(
@@ -38,7 +37,6 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         );
       } else {
-        // First time, show the intro screen
         Future.delayed(
           const Duration(seconds: 2),
           () => Navigator.of(context).pushReplacement(
